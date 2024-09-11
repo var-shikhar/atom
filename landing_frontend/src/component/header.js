@@ -61,8 +61,7 @@ const Header = () => {
                     ) :  
                         <NavDropdown title={userData.userName} id="collapsible-nav-dropdown">
                             <NavDropdown.Item onClick={() => setISOpen(!isOpen)}>Cart</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.1">Orders</NavDropdown.Item>
-                            {/* <NavDropdown.Item href="#action/3.3">Profile</NavDropdown.Item> */}
+                            <NavDropdown.Item href="/my-orders">Orders</NavDropdown.Item>
                             <NavDropdown.Item href="#" onClick={(e) => {
                                 e.preventDefault();
                                 handleLogout();

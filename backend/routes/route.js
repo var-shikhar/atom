@@ -64,6 +64,8 @@ router.route('/public/latest-product').get(productController.getLatestProduct);
 router.route('/public/checkout').get(orderController.getAPIAddress).post(isAuth, orderController.postCheckout).put(isAuth, orderController.putOrderConfirmation);
 router.route('/public/order').post(isAuth, orderController.postGoToCheckout).put(isAuth, orderController.putValidateCoupon);
 
+router.route('/public/my-order').get(isAuth, orderController.getUserOrderList)
+
 router.use('/', async (req, res) => {
     console.log(req.originalUrl);
     return res.send({ message: 'Undefined Request URL' })

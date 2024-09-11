@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import React from 'react'
 import { Button, FormCheck, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
-import NavSteps from '../component/navStep'
-import PaymentConfirmation from '../component/paymentConfirmation'
-import { FireToast } from '../context/toastContext'
-import useCheckout from '../hooks/useCheckout'
-import VALIDATION from '../util/validation'
+import NavSteps from '../../component/navStep'
+import PaymentConfirmation from '../../component/paymentConfirmation'
+import { FireToast } from '../../context/toastContext'
+import useCheckout from '../../hooks/useCheckout'
+import VALIDATION from '../../util/validation'
 
 const Checkout = () => {
     const { countryList, stateList, couponCode, submissionData,  activeStep, checkoutSteps, defaultValues, userData, loading, orderDetails, setCouponCode, setOrderDetails, setActiveStep, handleCheckout, handlePaymentConfirmation, handleCouponValidation, handleReEditCoupon } = useCheckout()

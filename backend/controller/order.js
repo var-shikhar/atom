@@ -156,6 +156,49 @@ const putOrderStatusUpdate = async (req, res) => {
 
 
 // Public Controllers
+// Get Controllers
+const getUserOrderList = async (req, res) => {
+    const userID = req.user;
+    try {
+        const orderList = await Order.find({ userId: userID, status: { $ne: 'Pending' } })
+            .populate({ path: 'products.productId', model: 'Product' })
+            .sort({ createdAt: -1 });
+
+        const foundOrders = orderList?.map(item => {
+            return {
+                orderID: item._id,
+                orderDate: item.orderDate,
+                orderTotal: item.finalAmount,
+                buyerName: item.buyerName,
+                paymentMode: item.paymentMode,
+                productList: item.products?.map(productEntry => {
+                    const product = productEntry.isVariation
+                        ? productEntry.productId.variations.find(varProduct => varProduct._id.toString() === productEntry.variationId)
+                        : productEntry.productId;
+
+                    return {
+                        productID: productEntry.productId?._id,
+                        productName: productEntry.productId?.name,
+                        productImage: product.images?.length > 0 ? product.images[0] : productEntry.productId.images[0],
+                        productQty: productEntry.quantity,
+                    };
+                }),
+                hasFeedback: item.receivedFeedback,
+                feedback: {
+                    text: item.feedback?.text,
+                    image: item.feedback?.image,
+                },
+                status: item.status,
+            };
+        });
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(foundOrders);
+    } catch (err) {
+        console.error(err);
+        res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
+
 
 // Post Controllers
 const postGoToCheckout = async (req, res) => {
@@ -365,5 +408,5 @@ const putOrderConfirmation = async (req, res) => {
 
 export default {
     getAPIAddress, getOrderList, getOrderDetail, getStatusList, putOrderStatusUpdate,
-    postGoToCheckout, putValidateCoupon, postCheckout, putOrderConfirmation,
+    getUserOrderList, postGoToCheckout, putValidateCoupon, postCheckout, putOrderConfirmation,
 }

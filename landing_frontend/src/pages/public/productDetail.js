@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Carousel } from 'react-bootstrap';
-import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
-import { useLoader } from '../context/loaderContext';
-import useOrder from '../hooks/useOrder';
-import useProductDetail from '../hooks/useProductDetail';
+import { useLoader } from '../../context/loaderContext';
+import useOrder from '../../hooks/useOrder';
+import useProductDetail from '../../hooks/useProductDetail'
 
 const ProductDetail = () => {
     const { setLoading } = useLoader()

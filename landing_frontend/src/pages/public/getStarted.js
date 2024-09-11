@@ -1,6 +1,6 @@
 import React, { startTransition, useEffect, useState } from 'react';
-import AUTH_FORMS from '../component/login';
-import useGetStarted from '../hooks/useGetStarted';
+import AUTH_FORMS from '../../component/login';
+import useGetStarted from '../../hooks/useGetStarted';
 
 const GetStarted = () => {
     const { modeType } = useGetStarted();

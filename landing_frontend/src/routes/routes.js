@@ -1,16 +1,17 @@
 import React from 'react';
-import About from '../pages/about';
-import Contact from '../pages/contact';
-import GetStarted from '../pages/getStarted';
-import LandingPage from '../pages/home';
-import PrivacyPolicy from '../pages/privacyPolicy';
-import ProductPanel from '../pages/product';
-import ProductDetail from '../pages/productDetail';
-import RefundPolicy from '../pages/refundPolicy';
-import ResetPassword from '../pages/resetPassword';
-import ShippingPolicy from '../pages/shippingPolicy';
-import TermsCondition from '../pages/termsCondition';
-import Checkout from '../pages/checkout';
+import About from '../pages/public/about';
+import Contact from '../pages/public/contact';
+import GetStarted from '../pages/public/getStarted';
+import LandingPage from '../pages/public/home';
+import PrivacyPolicy from '../pages/public/privacyPolicy';
+import ProductDetail from '../pages/public/productDetail';
+import RefundPolicy from '../pages/public/refundPolicy';
+import ResetPassword from '../pages/public/resetPassword';
+import ShippingPolicy from '../pages/public/shippingPolicy';
+import TermsCondition from '../pages/public/termsCondition';
+import Checkout from '../pages/member/checkout';
+import MyOrder from '../pages/member/myOrder';
+import ProductPanel from '../pages/public/product';
  
 const publicRoutes = [
   {
@@ -96,6 +97,13 @@ const publicRoutes = [
     route: '/checkout',
     isActiveRoute: false,
     element: <Checkout />
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'My Orders',
+    route: '/my-orders',
+    isActiveRoute: false,
+    element: <MyOrder />
   },
 ]
 

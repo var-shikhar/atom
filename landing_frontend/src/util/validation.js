@@ -113,10 +113,26 @@ const checkoutFormValidation = Yup.object().shape({
     stateID: Yup.string().notOneOf([''], 'Please select an valid option').required('Required field!'),
     countryID: Yup.string().notOneOf([''], 'Please select an valid option').required('Required field!'),    
 });
+const reviewFormValidation = Yup.object().shape({
+    reviewText: Yup.string()
+        .min(5, 'Min 5 Characters are required!')
+        .max(5000, 'Max 5000 Characters are allowed!')
+        .required('Required Field!'),
+    reviewImage: Yup.mixed()
+        .test('fileSize', 'File size too large, Max limit is 1MB', function (value) {
+            if (!value) return true; 
+            return value.size <= 1048576; 
+        })
+        .test('fileType', 'Invalid file type. Only PNG, JPG, and WEBP allowed', function (value) {
+            if (!value) return true; 
+            return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
+        })
+        .nullable() 
+});
 
 const VALIDATION = {
     loginFormValidation, registrationFormValidation, forgotPasswordFormValidation, passwordResetFormValidation,
-    contactFormValidation, checkoutFormValidation,
+    contactFormValidation, checkoutFormValidation, reviewFormValidation,
 }
 
 export default VALIDATION;

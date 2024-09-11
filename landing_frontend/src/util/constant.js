@@ -1,23 +1,28 @@
 const ORDER_STATUS = [
     {
-        status: 'Pending',
-        slug: 'pending'
-    },
-    {
+        id: 1,
         status: 'Processing',
-        slug: 'processing'
+        slug: 'Processing'
     },
     {
+        id: 2,
         status: 'Shipped',
-        slug: 'shipped'
+        slug: 'Shipped'
     },
     {
+        id: 3,
         status: 'Delivered',
-        slug: 'delivered'
+        slug: 'Delivered'
     },
     {
+        id: 4,
         status: 'Cancelled',
-        slug: 'cancelled'
+        slug: 'Cancelled'
+    },
+    {
+        id: 5,
+        status: 'Returned',
+        slug: 'Returned'
     },
 ]
 

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AUTH_FORMS from '../component/login';
-import { useAuthContext } from '../context/authContext';
+import AUTH_FORMS from '../../component/login';
+import { useAuthContext } from '../../context/authContext';
 
 const ResetPassword = () => {
     const {userID} = useAuthContext();

@@ -15,6 +15,9 @@ const getLatestProduct = `${BACKEND_ROUTES}/public/latest-product`;
 const commonCheckoutRoute = `${BACKEND_ROUTES}/public/checkout`;
 const postGOTOCheckoutRoute = `${BACKEND_ROUTES}/public/order`;
 
+const commonMyOrderRoute = `${BACKEND_ROUTES}/public/my-order`;
+const commonReviewRoute = `${BACKEND_ROUTES}/public/order-review`;
+
 
 
 
@@ -31,7 +34,8 @@ const ROUTES = {
     loginRoute, logoutRoute, registerRoute, forgotPasswordRoute, passwordUpdateRoute,
     commonProductRoute, commonProductVariationRoute, getLatestProduct,
     commonCheckoutRoute, postGOTOCheckoutRoute,
-
+    commonMyOrderRoute, commonReviewRoute,
+ 
     
     commonCustomerRoute, commonCustomerDetailRoute,
 }

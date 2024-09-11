@@ -13,6 +13,10 @@ const isMulterApproved = multer({ storage: storage, fileFilter }).fields([
         name: 'images',
         maxCount: 10
     },
+    {
+        name: 'reviewImage',
+        maxCount: 1
+    },
 ]);
 
 export default isMulterApproved;

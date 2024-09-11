@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import useProduct from '../hooks/useProduct';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
-import useOrder from '../hooks/useOrder';
+import useProduct from '../../hooks/useProduct';
+import useOrder from '../../hooks/useOrder';
 
 const ProductPanel = () => {
     const { productList, userData, handleProductNavigation } = useProduct();
