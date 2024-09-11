@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema({
     },
     resetToken: { 
         type: String,
-        required: true,
+        required: false,
         default: ''
     },
     defaultShippingAddress: {

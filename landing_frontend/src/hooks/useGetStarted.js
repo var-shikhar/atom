@@ -58,12 +58,13 @@ const useGetStarted = () => {
         })
 
         if (response?.status === 200) {
-            const { userEmail, userID, userName, cart } = response?.data;
+            const { userEmail, userID, userName, userPhone, cart } = response?.data;
         
             let userDetails = {
                 userID: userID,
                 userName: userName,
                 userEmail: userEmail,
+                userPhone: userPhone,
                 cart: []
             };
         
@@ -74,7 +75,7 @@ const useGetStarted = () => {
                     // Ensure the product and variation exist
                     if (!product) {
                         console.warn(`Product with ID ${item.productId} not found`);
-                        return null; // Skip this item if the product is not found
+                        return null; 
                     }
         
                     const selectedVariation = item.isVariation 
@@ -102,7 +103,7 @@ const useGetStarted = () => {
                 setUserData(userDetails);
             });
         
-            navigate('../my-orders');
+            navigate('../product');
         }       
     }
 

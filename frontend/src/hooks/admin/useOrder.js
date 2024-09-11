@@ -84,23 +84,6 @@ const useOrder = () => {
         }
     }
 
-    // Handle Product Status Update
-    async function handleOrderStatus(orderID, note) {
-        const response = await HandlePostRequest({
-            data: {orderID: orderID, note: note},
-            route: ROUTES.commonOrderRoute,
-            type: 'put',
-            toastDescription: 'Order status has updated successfully!'
-        });
-
-        if (response?.status === 200) {
-            startTransition(() => {
-                setLoading(prev => ({...prev, list: true}))
-                window.location.reload()
-            })
-        }
-    }
-
     // Handle Request Confirmation
     function handleConfirmation() { 
         startTransition(() => {
@@ -148,7 +131,6 @@ const useOrder = () => {
         setModalData,
         setSearchText,
         handleConfirmation,
-        handleOrderStatus,
         handleTableSorting,
     }
 }

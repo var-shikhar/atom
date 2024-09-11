@@ -136,13 +136,22 @@ const couponFormValidation = Yup.object().shape({
     isActive: Yup.boolean().notRequired()
 });
 
+const orderStatusFormValidation = Yup.object().shape({
+    statusID: Yup.string()
+        .notOneOf([''], 'Invalid Status Type')
+        .required('Status is required!'),
+    note: Yup.string()
+        .min(5, 'Min 5 Characters are required!')
+        .max(500, 'Max 500 Characters are allowed!')
+        .required('Required Field!'),
+});
 
 
 const VALIDATION = {
     loginFormValidation, 
     categoryFormValidation, subCategoryFormValidation, 
     productFormValidation, productVariationFormValidation,
-    couponFormValidation,
+    couponFormValidation, orderStatusFormValidation
 }
 
 export default VALIDATION;

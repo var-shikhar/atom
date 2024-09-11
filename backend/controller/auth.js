@@ -103,6 +103,7 @@ const postPublicRegister = async (req, res) => {
             userEmail: savedUser.email, 
             userID: savedUser._id,
             userName: savedUser.firstName + ' ' + savedUser.lastName,
+            userPhone: savedUser.phone,
             cart: [],
         };
         res.status(RouteCode.SUCCESS.statusCode).json(returnedData);
@@ -135,6 +136,7 @@ const postPublicLogin = async (req, res) => {
             userEmail: validateUser.email, 
             userID: validateUser._id,
             userName: validateUser.firstName + ' ' + validateUser.lastName,
+            userPhone: validateUser.phone,
             cart: validateUser.cart,
         };
 

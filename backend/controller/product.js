@@ -224,6 +224,7 @@ const getPublicProductList = async (req, res) => {
                 return {
                     id: product._id,
                     productName: product.name,
+                    productTax: product.categoryId.categoryTax,
                     categoryName: product.categoryId.name,
                     mrp: product.baseMRPPrice,
                     sellingPrice: product.baseSellingPrice,
@@ -234,6 +235,7 @@ const getPublicProductList = async (req, res) => {
                 }
             }))
         }
+        
         return res.status(RouteCode.SUCCESS.statusCode).json(productList);
     } catch (err) {
         console.error('Error retrieving product list:', err);

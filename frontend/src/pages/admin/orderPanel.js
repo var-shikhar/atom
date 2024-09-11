@@ -8,9 +8,10 @@ import { TbStatusChange } from "react-icons/tb";
 import ModalWrapper from '../../component/modalWrapper';
 import useOrder from '../../hooks/admin/useOrder';
 import OrderDetail from '../../component/orderDetail';
+import OrderStatus from '../../component/orderStatus';
 
 const OrderPanel = () => {
-    const { filteredList, modalData, modalToggle, searchText, filterDate, setFilterDate, setModalData, setModalToggle, setSearchText, handleOrderStatus, handleTableSorting } = useOrder();
+    const { filteredList, modalData, modalToggle, searchText, filterDate, setFilterDate, setModalData, setModalToggle, setSearchText, handleTableSorting, handleConfirmation } = useOrder();
 
     function handleModalForm(title, size, id, mode) {
         setModalData({mode, orderID: id, size, title}); 
@@ -48,6 +49,7 @@ const OrderPanel = () => {
                         <th className='cursor-pointer' onClick={() => handleTableSorting('buyerName')}>Buyer Name</th>
                         <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('finalAmount')}>Order Value</th>
                         <th className='text-center'>Shipping Address</th>
+                        <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('paymentMode')}>Payment Mode</th>
                         <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('status')}>Status</th>
                         <th className='text-center'>Interact</th>
                     </tr>
@@ -68,6 +70,7 @@ const OrderPanel = () => {
                                 <div>{order.shippingAddress.city}</div>
                                 <small>{order.shippingAddress.stateId?.name}</small>
                             </td>
+                            <td className='text-center'>{order.paymentMode}</td>
                             <td className='text-center'>{order.status}</td>
                             <td>
                                 <div className="d-flex gap-2 w-100 justify-content-center align-items-center">
@@ -81,7 +84,7 @@ const OrderPanel = () => {
                                             </Tooltip>
                                         )}
                                     >
-                                        <Button variant="primary" onClick={() => handleModalForm('View Order Details', 'lg', order._id, 'View')}>
+                                        <Button variant="primary" onClick={() => handleModalForm('View Order Details', 'xl', order._id, 'View')}>
                                             <FaEye />
                                         </Button>
                                     </OverlayTrigger>
@@ -95,7 +98,7 @@ const OrderPanel = () => {
                                             </Tooltip>
                                         )}
                                     >
-                                        <Button variant="warning" onClick={() =>  handleModalForm("Update Status", 'md', order._id, 'Status')}>
+                                        <Button variant="warning" onClick={() =>  handleModalForm("Update Status", 'lg', order._id, 'Status')}>
                                             <TbStatusChange />
                                         </Button>
                                     </OverlayTrigger>
@@ -107,7 +110,7 @@ const OrderPanel = () => {
             </Table>
             {modalToggle ? 
                 <ModalWrapper title={modalData.title} toggle={modalToggle} setToggle={setModalToggle} size={modalData.size}>
-                    <OrderDetail id={modalData.orderID} />
+                    {modalData.mode === 'View' ? <OrderDetail id={modalData.orderID} /> : <OrderStatus orderID={modalData.orderID} handleConfirmation={handleConfirmation} />}
                 </ModalWrapper >
             : <></>}
         </>

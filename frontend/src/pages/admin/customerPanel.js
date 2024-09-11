@@ -21,8 +21,8 @@ const CustomerPanel = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Customer Name</th>
-                        <th className='text-center'>Customer Email</th>
+                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('userName')}>Customer Name</th>
+                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('email')}>Customer Email</th>
                         <th className='text-center cursor-pointer' onClick={() => handleTableSorting('email')}>Customer Phone</th>
                         <th className='text-center cursor-pointer' onClick={() => handleTableSorting('phone')}>Total Order Amount</th>
                         <th className='text-center cursor-pointer' onClick={() => handleTableSorting('totalOrderAmount')}>Interact</th>
@@ -33,9 +33,9 @@ const CustomerPanel = () => {
                         <tr key={customer.id}>
                             <td>{index + 1}</td>
                             <td>{customer.userName}</td>
-                            <td className='text-center'>{customer.email}</td>
-                            <td className='text-center'>{customer.phone}</td>
-                            <td className='text-center'>₹ {customer.totalOrderAmount}/-</td>
+                            <td className='text-center'>{customer.userEmail}</td>
+                            <td className='text-center'>{customer.userPhone}</td>
+                            <td className='text-center'>₹ {customer.totalAmount}/-</td>
                             <td>
                                 <div className="d-flex gap-2 w-100 justify-content-center align-items-center">
                                     <OverlayTrigger
@@ -48,7 +48,7 @@ const CustomerPanel = () => {
                                             </Tooltip>
                                         )}
                                     >
-                                        <Button variant="primary" onClick={() => handleCustomerDetail(customer._id)}>
+                                        <Button variant="primary" onClick={() => handleCustomerDetail(customer.userID)}>
                                             <CiViewList />
                                         </Button>
                                     </OverlayTrigger>

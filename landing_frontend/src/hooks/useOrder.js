@@ -4,56 +4,24 @@ import { useCart } from '../context/cartContext'
 import useAxioRequests from '../function/axioRequest'
 import ROUTES from '../util/routes'
 
-const checkoutSteps = [
-    {
-        id: 1,
-        name: 'User Details',
-        slug: 'user-details'
-    },
-    {
-        id: 2,
-        name: 'Review & Submit',
-        slug: 'review'
-    },
-    {
-        id: 3,
-        name: 'Payment Completion',
-        slug: 'payment'
-    },
-]
-
 const useOrder = () => {
     const { userID, userData, setUserData }  = useAuthContext()
     const {HandleGetRequest, HandlePostRequest} = useAxioRequests()
     const { isOpen, setISOpen } = useCart();
 
-    const [loading, setLoading] = useState({
-        productList: true,
-        shipping: true,
-    })
-
+    const [loading, setLoading] = useState({ productList: true })
     const [productList, setProductList] = useState([]);
-    const [stateList, setStateList] = useState([]);
-    const [countryList, setCountryList] = useState([]);
-    const [activeStep, setActiveStep] = useState(checkoutSteps[0].slug)
-
     
     useEffect(() => {
         loading.productList && handleGetRequest(ROUTES.commonProductRoute, 'productList')
-        loading.shipping && handleGetRequest(ROUTES.commonCheckoutRoute, 'shipping')
-    }, [loading.shipping])
+    }, [loading.productList])
 
     async function handleGetRequest(route, mode){
         const response = await HandleGetRequest(route);
         if(response?.status === 200){
             startTransition(() => {
                 setLoading(prev => ({...prev, [mode]: false}));
-                if(mode === 'productList'){
-                    setProductList(response.data)
-                } else {
-                    setStateList(response.data.stateList);
-                    setCountryList(response.data.countryList)
-                }
+                setProductList(response.data)
             })
         }
     }
@@ -112,6 +80,7 @@ const useOrder = () => {
                             id: crypto.randomUUID(),
                             productId: product.id,
                             productName: product.productName,
+                            productTax: product.productTax,
                             coverImage: product.coverImage,
                             isVariation: hasVariation,
                             variationID: variationID,
@@ -132,36 +101,11 @@ const useOrder = () => {
             window.location.href = '../get-started';
         }
     }
-
-    // Handle Checkout
-    async function handleCheckout(values){
-        if(userData?.cart?.length > 0){
-            values.orderData = userData.cart
-            const response = await HandlePostRequest({
-                data: values,
-                route: ROUTES.commonCheckoutRoute,
-                type: 'post',
-                toastDescription: 'Order has placed successfully!'
-            });
-
-            if(response?.status === 200) {
-                setUserData(prev => ({...prev, cart: []}))
-                window.location.href = '../my-orders';
-            }
-        }
-    }
-
     
     return {
         handleAddtoCart,
         handleGoToCheckout,
-        stateList,
-        countryList,
-        userData,
-        handleCheckout,
-        checkoutSteps,
-        activeStep, 
-        setActiveStep
+        userData
     }
 }
 

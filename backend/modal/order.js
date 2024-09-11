@@ -6,6 +6,66 @@ const orderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    buyerName: {
+        type: String,
+        required: true,
+    },
+    buyerEmail: {
+        type: String,
+        required: true,
+    },
+    buyerPhone: {
+        type: Number,
+        required: true,
+    },
+    shippingAddress: {
+        billingAddress: { 
+            type: String, 
+            required: true 
+        },
+        shippingAddress: { 
+            type: String,
+            required: false,
+        },
+        city: { 
+            type: String, 
+            required: true 
+        },
+        stateId: { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'State', 
+            required: true 
+        },
+        zipCode: { 
+            type: String, 
+            required: true 
+        },
+        countryId: { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Country', 
+            required: true 
+        }
+    },
+    totalAmount: {
+        type: Number,
+        required: true
+    },
+    discount: {
+        type: Number,
+        required: true
+    },
+    totalTax: {
+        type: Number,
+        required: true
+    },
+    finalAmount: {
+        type: Number,
+        required: true
+    }, 
+    orderDate: {
+        type: Date,
+        default: Date.now
+    },
     products: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -32,61 +92,9 @@ const orderSchema = new mongoose.Schema({
             required: true
         }
     }],
-    buyerName: {
-        type: String,
-        required: true,
-    },
-    buyerPhone: {
-        type: Number,
-        required: true,
-    },
-    totalAmount: {
-        type: Number,
-        required: true
-    },
-    discount: {
-        type: Number,
-        required: true
-    },
-    finalAmount: {
-        type: Number,
-        required: true
-    }, 
-    orderDate: {
-        type: Date,
-        default: Date.now
-    },
-    shippingAddress: {
-        addressLine1: { 
-            type: String, 
-            required: true 
-        },
-        addressLine2: { 
-            type: String,
-            required: false,
-        },
-        city: { 
-            type: String, 
-            required: true 
-        },
-        stateId: { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'State', 
-            required: true 
-        },
-        zipCode: { 
-            type: String, 
-            required: true 
-        },
-        countryId: { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Country', 
-            required: true 
-        }
-    },
     status: {
         type: String,
-        enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+        enum: ['Pending', 'Received', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned'],
         default: 'Pending'
     },
     statusLog: [{
@@ -97,6 +105,11 @@ const orderSchema = new mongoose.Schema({
         note: {
             type: String,
             required: false
+        },
+        updateDate: {
+            type: Date,
+            required: false,
+            default: Date.now
         }
     }],
     paymentMode: {

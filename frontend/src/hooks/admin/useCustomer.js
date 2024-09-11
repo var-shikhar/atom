@@ -53,7 +53,7 @@ const useCustomer = () => {
 
     // Handle Product Status Update
     async function handleCustomerDetail(customerID) {
-        navigate(`../customer/${customerID}/detail`)
+        navigate(`../customer/${customerID}`)
     }
 
     // Handle Table Sorting

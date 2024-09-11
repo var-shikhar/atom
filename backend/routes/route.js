@@ -43,8 +43,9 @@ router.route('/admin/coupon/:couponID').get(isAuth, couponContoller.getInitCoupo
 router.route('/admin/customer').get(isAuth, memberContoller.getMemberList);
 
 // Order Routes
-router.route('/admin/order').get(isAuth, orderController.getOrderList).put(isAuth, )
-router.route('/admin/order/:orderID').get(isAuth, orderController.getOrderDetail)
+router.route('/admin/order').get(isAuth, orderController.getOrderList);
+router.route('/admin/order/status/:orderID?').get(isAuth, orderController.getStatusList).put(isAuth, orderController.putOrderStatusUpdate)
+router.route('/admin/order/:orderID').get(isAuth, orderController.getOrderDetail);
 
 
 
@@ -60,8 +61,8 @@ router.route('/public/product').get(productController.getPublicProductList);
 router.route('/public/product/:productID').get(productController.getPublicProductDetails);
 router.route('/public/latest-product').get(productController.getLatestProduct);
 
-router.route('/public/checkout').get(orderController.getAPIAddress).post(isAuth, orderController.postCheckout);
-router.route('/public/order').post(isAuth, orderController.postGoToCheckout);
+router.route('/public/checkout').get(orderController.getAPIAddress).post(isAuth, orderController.postCheckout).put(isAuth, orderController.putOrderConfirmation);
+router.route('/public/order').post(isAuth, orderController.postGoToCheckout).put(isAuth, orderController.putValidateCoupon);
 
 router.use('/', async (req, res) => {
     console.log(req.originalUrl);

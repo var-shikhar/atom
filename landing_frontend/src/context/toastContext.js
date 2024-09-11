@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
-import { ToastContainer, Toast } from 'react-bootstrap';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Toast, ToastContainer } from 'react-bootstrap';
 
 const ToastContext = createContext();
 let fireToastFn = null; // Define fireToastFn globally
@@ -25,7 +25,7 @@ export const ToastProvider = ({ children }) => {
     }, [toast, autoClose, elapsedTime, startTime]);
 
     function handleProgress() {
-        const duration = 50000;
+        const duration = 5000;
 
         const now = Date.now();
         const elapsed = now - startTime;

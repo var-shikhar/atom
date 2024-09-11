@@ -75,15 +75,4 @@ const ProductModal = () => {
   );
 };
 
-
-{/* <div className="product-modal">
-<div className="modal-content">
-  <h2>{product.name}</h2>
-  <img src={product.image} alt={product.name} />
-  <p>{product.description}</p>
-  <button onClick={handleClose}>Visit Product</button>
-  <button onClick={handleClose}>Close</button>
-</div>
-</div> */}
-
 export default ProductModal;

@@ -1,5 +1,6 @@
 :root{
   --bg-dark: #000000;
+  --bg-success: #0dfe00;
   --white: #ffffff;
   --light-1: #F1F1F1;
   --light-2: #f1f1f1cb;
@@ -37,8 +38,8 @@ body {
   background-color: var(--bg-dark);
 }
 
-.max-content {
-  width: max-content;
+.bg-success{
+  background-color: var(--bg-success);
 }
 
 .bg-gray{
@@ -46,8 +47,16 @@ body {
   transition: all 1s ease-in-out;
 }
 
+.bg-inherit{
+  background-color: inherit;
+}
+
 .bg-gray > div, .bg-gray > div > * {
   background-color: inherit;
+}
+
+.max-content {
+  width: max-content;
 }
 
 .cursor-pointer{
@@ -112,6 +121,15 @@ code {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-50 {
+    width: 50%;
+  }
+  .w-md-75 {
+    width: 75%;
   }
 }
 
