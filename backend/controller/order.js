@@ -5,6 +5,7 @@ import Country from "../modal/country.js";
 import Order from "../modal/order.js";
 import Product from "../modal/product.js";
 import Coupon from "../modal/coupon.js";
+import { handleImageUploading } from "../helper/cloudinary.js";
 
 const { RouteCode } = CONSTANT;
 
@@ -25,8 +26,12 @@ const getAPIAddress = async (req, res) => {
     }
 }
 const getOrderList = async (req, res) => {
+    const {reqUserID} = req.params;
     try {
-        const orderList = await Order.find({}, '_id buyerName createdAt finalAmount shippingAddress.city shippingAddress.stateId status paymentMode').populate('shippingAddress.stateId').sort({createdAt: -1});
+        const orderList = (reqUserID === undefined  || reqUserID === '') 
+                            ? await Order.find({}, '_id buyerName createdAt finalAmount shippingAddress.city shippingAddress.stateId status paymentMode').populate('shippingAddress.stateId').sort({createdAt: -1})
+                            : await Order.find({userId: reqUserID}, '_id buyerName createdAt finalAmount shippingAddress.city shippingAddress.stateId status paymentMode').populate('shippingAddress.stateId').sort({createdAt: -1});
+
         return res.status(RouteCode.SUCCESS.statusCode).json(orderList);
     } catch (err) {
         console.error(err);
@@ -163,7 +168,7 @@ const getUserOrderList = async (req, res) => {
         const orderList = await Order.find({ userId: userID, status: { $ne: 'Pending' } })
             .populate({ path: 'products.productId', model: 'Product' })
             .sort({ createdAt: -1 });
-
+        
         const foundOrders = orderList?.map(item => {
             return {
                 orderID: item._id,
@@ -181,6 +186,11 @@ const getUserOrderList = async (req, res) => {
                         productName: productEntry.productId?.name,
                         productImage: product.images?.length > 0 ? product.images[0] : productEntry.productId.images[0],
                         productQty: productEntry.quantity,
+                        hasFeedback: productEntry.hasFeedback,
+                        feedback: {
+                            text: productEntry.feedback.text,
+                            image: productEntry.feedback.image,
+                        }
                     };
                 }),
                 hasFeedback: item.receivedFeedback,
@@ -198,7 +208,99 @@ const getUserOrderList = async (req, res) => {
         res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
     }
 };
+const getPublicOrderDetail = async (req, res) => {
+    const { orderID } = req.params;
+    try {
+        const orderDetails = await Order.findById(orderID)
+            .populate({ path: 'products.productId', model: 'Product' })
+            .populate('shippingAddress.stateId')
+            .populate('shippingAddress.countryId');
+            
+        if (!orderDetails) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Order not found, Try later!' });
+        }
 
+        const productDetailsPromises = orderDetails.products.map(async (product) => {
+            const foundProduct = product.productId ? product.productId.toObject() : null;
+
+            if (!foundProduct) {
+                return {
+                    _id: null,
+                    productName: 'Product not found',
+                    productDescription: '',
+                    productPrice: 0,
+                    productQuantity: 0,
+                    productSKU: '',
+                    productImage: '',
+                    isVariation: false,
+                    variationID: '',
+                    variationType: '',
+                    hasFeedback: false,
+                    feedback: {
+                        text: '',
+                        image: '',
+                    }
+                };
+            }
+
+            if (product.isVariation && product.variationId !== '') {
+                const variation = foundProduct.variations?.find(item => item._id.toString() === product.variationId.toString());
+
+                if (!variation) {
+                    return null;
+                }
+
+                return {
+                    _id: foundProduct._id,
+                    productName: foundProduct.name,
+                    productDescription: foundProduct.description,
+                    productPrice: product.price,
+                    productQuantity: product.quantity,
+                    productSKU: variation.sku,
+                    productImage: variation.images?.length > 0 ? variation.images[0] : foundProduct.images?.[0] || '',
+                    isVariation: true,
+                    variationID: variation._id,
+                    variationType: variation.value,
+                    hasFeedback: product.hasFeedback,
+                    feedback: {
+                        text: product.feedback.text,
+                        image: product.feedback.image,
+                    }
+                };
+            } else {
+                return {
+                    _id: foundProduct._id,
+                    productName: foundProduct.name,
+                    productDescription: foundProduct.description,
+                    productPrice: product.price,
+                    productQuantity: product.quantity,
+                    productSKU: foundProduct.baseSku,
+                    productImage: foundProduct.images?.[0] || '',
+                    isVariation: false,
+                    variationID: '',
+                    variationType: '',
+                    hasFeedback: product.hasFeedback,
+                    feedback: {
+                        text: product.feedback.text,
+                        image: product.feedback.image,
+                    }
+                };
+            }
+        });
+
+        const productDetails = (await Promise.all(productDetailsPromises)).filter(Boolean);
+
+        const foundOrder = {
+            ...orderDetails.toObject(),
+            products: productDetails
+        };
+    
+        return res.status(RouteCode.SUCCESS.statusCode).json(foundOrder);
+    } catch (err) {
+        console.error(err);
+        res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
 
 // Post Controllers
 const postGoToCheckout = async (req, res) => {
@@ -318,6 +420,54 @@ const postCheckout = async (req, res) => {
     }
 };
 
+const postReview = async (req, res) => {
+    const userID = req.user;
+    const { orderID, productID, reviewText } = req.body;
+
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser) {
+            return res.status(RouteCode.UNAUTHORIZED.statusCode).json({ message: 'Unauthorized Access, Try again!' });
+        }
+
+        const foundOrder = await Order.findOne({ userId: userID, _id: orderID });
+        if (!foundOrder) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Order not found, Try again!' });
+        }
+
+        if (!reviewText || reviewText.trim() === "") {
+            return res.status(RouteCode.BAD_REQUEST.statusCode).json({ message: 'Review text is required' });
+        }
+
+        let feedbackImage = '';
+        if (req.files && req.files.reviewImage) {
+            feedbackImage = await handleImageUploading(req.files.reviewImage[0].buffer, req.files.reviewImage[0].mimetype);
+        }
+
+        const productIndex = foundOrder.products.findIndex(p => p.productId.toString() === productID);
+        if (productIndex === -1) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Product not found in the order' });
+        }
+
+        if (foundOrder.products[productIndex].hasFeedback) {
+            return res.status(RouteCode.BAD_REQUEST.statusCode).json({ message: 'Feedback for this product has already been given' });
+        }
+
+        foundOrder.products[productIndex].feedback.text = reviewText;
+        foundOrder.products[productIndex].feedback.image = feedbackImage;
+        foundOrder.products[productIndex].hasFeedback = true;
+
+        // Set order-level feedback to true if necessary
+        foundOrder.receivedFeedback = true;
+
+        await foundOrder.save();
+        res.status(RouteCode.SUCCESS.statusCode).json({ message: 'Product review has been shared successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
+
 // Put Controllers
 const putValidateCoupon = async (req, res) => {
     const { code, totalAmount } = req.body;
@@ -408,5 +558,5 @@ const putOrderConfirmation = async (req, res) => {
 
 export default {
     getAPIAddress, getOrderList, getOrderDetail, getStatusList, putOrderStatusUpdate,
-    getUserOrderList, postGoToCheckout, putValidateCoupon, postCheckout, putOrderConfirmation,
+    getUserOrderList, getPublicOrderDetail, postGoToCheckout, putValidateCoupon, postCheckout, putOrderConfirmation, postReview,
 }

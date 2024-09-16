@@ -5,7 +5,7 @@ import useAxioRequests from '../function/axioRequest';
 import ROUTES from '../util/routes';
 
 const useProduct = () => {
-    const { userData }  = useAuthContext()
+    const { userID, userData }  = useAuthContext()
     const { HandleGetRequest } = useAxioRequests();
 
     const navigate = useNavigate();
@@ -31,6 +31,7 @@ const useProduct = () => {
     }
     
     return {
+        userID,
         userData,
         productList,
         handleProductNavigation,

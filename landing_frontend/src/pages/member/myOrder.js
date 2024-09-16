@@ -1,11 +1,16 @@
-import React from 'react'
+import React from 'react';
 import { Button } from 'react-bootstrap';
+import ReviewForm from '../../component/form/reviewForm';
+import ModalWrapper from '../../component/modalWrapper';
+import ViewReview from '../../component/viewReview';
 import useMyOrder from '../../hooks/useMyOrder';
 
 const MyOrder = () => {
-    const {filterDate, filteredList, searchText, ORDER_STATUS, filterStatus, setFilterDate, setSearchText, setFilterStatus, handleOrderDetails} = useMyOrder()
-    //     feedback: { text: '', image: '' },
-
+    const {filterDate, filteredList, searchText, ORDER_STATUS, filterStatus, modalToggle, modalData, setModalData, setModalToggle, setFilterDate, setSearchText, setFilterStatus, handleOrderDetails, handleConfirmation} = useMyOrder();
+    function handleReviewModal(id, productID, title, size, mode, text, imageURL){
+        setModalData({mode: mode, orderID: id, productID: productID, size: size, title: title, review : {imageURL: imageURL, text: text}});
+        setModalToggle(!modalToggle)
+    }
     return (
         <section className='body-warpper checkout-warpper'>
             <div className='container text-light'>
@@ -27,7 +32,7 @@ const MyOrder = () => {
                         className='form-control'
                     />
                     <select name='statusFilter' id="statusFilter" className='form-control max-content' value={filterStatus} defaultValue={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                        <option className='bg-light' value={''} aria-readonly readonly>Select Status</option>
+                        <option className='bg-light' value={''} aria-readonly={true} readOnly>Select Status</option>
                         {ORDER_STATUS?.map(item => <option className='bg-light' key={item.id} value={item.slug}>{item.status}</option>)}
                     </select>
                 </div>
@@ -64,14 +69,22 @@ const MyOrder = () => {
                                         <div className='p-2 pt-md-3 rounded shadow row'>
                                             <div className='col-12 col-md-8'>
                                                 {item.productList?.length > 0 ? 
-                                                    <div className='d-flex gap-2 flex-column'>
+                                                    <div className='d-flex gap-2 flex-column w-100'>
                                                         {item.productList?.map(product => 
-                                                            <div key={product.productID} className='d-flex gap-2 align-items-center'>
-                                                                <img src={product.productImage} width={40} height={40} className='object-fit-cover rounded' />
-                                                                <div>
-                                                                    <div>{product.productName}</div>
-                                                                    <div>{product.productQty} {product.productQty > 1 ? 'PCs' : 'PC'}</div>
+                                                            <div key={product.productID} className='d-flex gap-2 align-items-center justify-content-between w-100'>
+                                                                <div className='d-flex gap-2 align-items-center'>
+                                                                    <img src={product.productImage} width={40} height={40} className='object-fit-cover rounded' />
+                                                                    <div>
+                                                                        <div>{product.productName}</div>
+                                                                        <div>{product.productQty} {product.productQty > 1 ? 'PCs' : 'PC'}</div>
+                                                                    </div>
                                                                 </div>
+                                                                {(item.status === 'Delivered' || item.status === 'Returned') && <>
+                                                                    {!product.hasFeedback  
+                                                                        ? <Button type='button' size='sm' onClick={() => handleReviewModal(item.orderID, product.productID, 'Write a reivew', 'md', 'Form', '', '')}>Write a Review</Button> 
+                                                                        : <Button type='button' size='sm'  onClick={() => handleReviewModal(item.orderID, product.productID, 'View your reivew', 'md', 'View', product?.feedback?.text, product?.feedback?.image)}>View Review</Button>
+                                                                    }
+                                                                </>}
                                                             </div>
                                                         )}
                                                     </div>
@@ -88,7 +101,6 @@ const MyOrder = () => {
                                                         <div className=''>{item.paymentMode}</div>
                                                     </div>
                                                </div>
-                                                {!item.hasFeedback  ? <Button type='button' className='d-block me-auto mt-2'>Write a Review</Button> : <Button type='button'  className='d-block me-auto mt-2'>View Review</Button>}
                                             </div>
                                         </div>
                                     </div>
@@ -100,9 +112,14 @@ const MyOrder = () => {
                     }
                 </div>
             </div>
+            <ModalWrapper toggle={modalToggle} setToggle={setModalToggle} title={modalData.title} size={modalData.size}>
+                {modalData.mode === 'Form' 
+                    ? <ReviewForm id={modalData.orderID} productID={modalData.productID} handleConfirmation={handleConfirmation} />
+                    : <ViewReview imageURL={modalData.review.imageURL} text={modalData.review.text} />
+                }
+            </ModalWrapper>
         </section>
     )
 }
-
 
 export default MyOrder

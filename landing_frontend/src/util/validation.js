@@ -71,7 +71,7 @@ const contactFormValidation = Yup.object().shape({
     message: Yup.string()
         .min(3, 'Minimum 3 characters are required')
         .max(500, 'Maximum 500 characters are allowed')
-        .optional(),
+        .required('Required Field'),
     email: Yup.string()
         .email('Invalid email address')
         .required('Email is required'),

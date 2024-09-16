@@ -4,7 +4,7 @@ import { useAuthContext } from '../../context/authContext';
 import useAxioRequests from '../../function/axioRequest';
 import ROUTES from '../../util/routes';
 
-const useOrder = (id = '') => {
+const useContactLead = () => {
     const { userID } = useAuthContext()
     const {HandleGetRequest, HandlePostRequest} = useAxioRequests();
     const navigate = useNavigate()
@@ -12,59 +12,53 @@ const useOrder = (id = '') => {
         list: true,
     })
 
-    const [orderList, setOrderList] = useState([])
+    const [contactLeadList, setContactLeadList] = useState([])
     const [filteredList, setFilteredList] = useState([])
+    const [modalToggle, setModalToggle] = useState(false)
+    const [modalData, setModalData] = useState({
+        id: ''
+    })
 
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
     const [searchText, setSearchText] = useState('')
     const [filterDate, setFilterDate] = useState({
         stDate: '',
         edDate: '',
     })
-    const [modalToggle, setModalToggle] = useState(false);
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-    const [modalData, setModalData] = useState({
-        title: '',
-        size: '',
-        orderID: '',
-        mode: '',
-    });
-
-   
     useLayoutEffect(() => {
-        if(userID === '' || userID === undefined) navigate('../login')
+        if(!userID) navigate('../login')
     }, [userID])
 
     useEffect(() => {
-        const orderRoute = id === '' ? ROUTES.commonOrderRoute : `${ROUTES.commonOrderRoute}/${id}`
-        loading.list && handleGetRequest(orderRoute, 'list')
-    }, [loading.list, userID])
+        loading.list && handleGetRequest(ROUTES.commonContactLeadRoute, 'list')
+    }, [loading.list])
 
     // Filter Product List
     useEffect(() => {
-        if(orderList?.length > 0){
-            let tempList = orderList;
+        if(contactLeadList?.length > 0){
+            let tempList = contactLeadList;
             if(searchText !== ''){
-                tempList = tempList.filter(order => String(order.buyerName).toLowerCase().includes(searchText.toLowerCase()) || String(order._id).toLowerCase().includes(searchText.toLowerCase()))
+                tempList = tempList.filter(lead => lead.userName.toLowerCase().includes(searchText.toLowerCase()))
             }
 
             if(filterDate.stDate !== '' ){
                 const stDate = new Date(filterDate.stDate);
                 stDate.setHours(0,0,0,0);
-                tempList = tempList.filter(order => {
-                    const oDate = new Date(order.createdAt);
-                    oDate.setHours(0,0,0,0);
-                    return oDate >= stDate
+                tempList = tempList.filter(lead => {
+                    const leadStDate = new Date(lead.createdAt);
+                    leadStDate.setHours(0,0,0,0);
+                    return leadStDate >= stDate
                 })
             }
 
             if(filterDate.edDate !== '' ){
                 const edDate = new Date(filterDate.edDate);
                 edDate.setHours(0,0,0,0);
-                tempList = tempList.filter(order => {
-                    const oDate = new Date(order.createdAt);
-                    oDate.setHours(0,0,0,0);
-                    return oDate <= edDate
+                tempList = tempList.filter(lead => {
+                    const leadEdDate = new Date(lead.createdAt);
+                    leadEdDate.setHours(0,0,0,0);
+                    return leadEdDate <= edDate
                 })
             }
 
@@ -72,7 +66,7 @@ const useOrder = (id = '') => {
                 setFilteredList(tempList);
             })
         }
-    }, [orderList, searchText, filterDate.edDate, filterDate.stDate])
+    }, [contactLeadList, searchText, filterDate.edDate, filterDate.stDate])
  
     // Fetch Lists from Server
     async function handleGetRequest(route, mode) {
@@ -80,17 +74,25 @@ const useOrder = (id = '') => {
         if (response?.status === 200) {
             startTransition(() => {
                 setLoading(prev => ({...prev, [mode]: false}))
-                setOrderList(response.data)
+                setContactLeadList(response.data)
             })
         }
     }
 
-    // Handle Request Confirmation
-    function handleConfirmation() { 
-        startTransition(() => {
-            setLoading(prev => ({...prev, list: true}))
-            setModalToggle(!modalToggle);
-        })
+    // Handle Deletion
+    async function handleContactLeadDeletion(id) {
+        const response = await HandlePostRequest({
+            data: {leadID: id},
+            route: `${ROUTES.commonContactLeadRoute}/${id}`,
+            type: 'delete',
+            toastDescription: `Contact Lead has deleted successfully!`
+        });
+
+        if (response?.status === 200) {
+            startTransition(() => {
+                setLoading(prev => ({...prev, list: true}))
+            })
+        }
     }
 
     // Handle Table Sorting
@@ -121,19 +123,28 @@ const useOrder = (id = '') => {
         })
     }
 
-    return {
-        filteredList,
-        searchText,
-        modalToggle,
-        modalData, 
-        filterDate, 
-        setFilterDate,
-        setModalToggle,
-        setModalData,
-        setSearchText,
-        handleConfirmation,
-        handleTableSorting,
+    // Handle Request Confirmation
+    function handleConfirmation() { 
+        startTransition(() => {
+            setLoading(prev => ({...prev, list: true}))
+            setModalToggle(!modalToggle);
+        })
     }
+
+  return {
+    filteredList,
+    searchText, 
+    filterDate, 
+    modalToggle, 
+    modalData,
+    setModalToggle,
+    setModalData,
+    setFilterDate,
+    setSearchText,
+    handleTableSorting,
+    handleContactLeadDeletion,
+    handleConfirmation
+  }
 }
 
-export default useOrder
+export default useContactLead

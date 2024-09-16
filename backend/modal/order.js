@@ -90,6 +90,23 @@ const orderSchema = new mongoose.Schema({
         price: {
             type: Number,
             required: true
+        },
+        hasFeedback: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        feedback: {
+            text: {
+                type: String,
+                required: false,
+                default: '',
+            },
+            image: {
+                type: String,
+                required: false,
+                default: '',
+            },
         }
     }],
     status: {

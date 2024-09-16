@@ -12,6 +12,7 @@ import TermsCondition from '../pages/public/termsCondition';
 import Checkout from '../pages/member/checkout';
 import MyOrder from '../pages/member/myOrder';
 import ProductPanel from '../pages/public/product';
+import OrderDetails from '../pages/member/orderDetail';
  
 const publicRoutes = [
   {
@@ -104,6 +105,13 @@ const publicRoutes = [
     route: '/my-orders',
     isActiveRoute: false,
     element: <MyOrder />
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'My Orders',
+    route: '/my-orders/:id',
+    isActiveRoute: false,
+    element: <OrderDetails />
   },
 ]
 

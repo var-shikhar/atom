@@ -58,8 +58,13 @@ const useGetStarted = () => {
         })
 
         if (response?.status === 200) {
+            // wishlist
             const { userEmail, userID, userName, userPhone, cart } = response?.data;
-        
+
+            const latestCartValue = JSON.parse(localStorage.getItem('localCart')) || [];
+            console.log(latestCartValue)
+            const finalCartValue = latestCartValue?.length <= 0 ? cart : latestCartValue;
+
             let userDetails = {
                 userID: userID,
                 userName: userName,
@@ -68,8 +73,8 @@ const useGetStarted = () => {
                 cart: []
             };
         
-            if (cart?.length > 0) {
-                const updatedCart = cart.map(item => {
+            if (finalCartValue?.length > 0) {
+                const updatedCart = finalCartValue.map(item => {
                     const product = productList?.find(product => product.id.toString() === item.productId.toString());
         
                     // Ensure the product and variation exist

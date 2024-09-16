@@ -10,26 +10,36 @@ import useAxioRequests from '../function/axioRequest';
 import ContentRoute from '../routes/routes';
 import ROUTES from '../util/routes';
 import { useCart } from '../context/cartContext';
+import { useWishList } from '../context/wishlistContext';
 
 
 const Header = () => {
   const { userID, userData } = useAuthContext();
   const { defaultRoutes } = ContentRoute();
   const {isOpen, setISOpen} = useCart();
+  const { wISOpen, setWISOpen } = useWishList();
   const { HandleGetRequest } = useAxioRequests()
 
+  
   const handleLogout = async () => {
     try {
       const response = await HandleGetRequest(ROUTES.logoutRoute);
+  
       if (response?.status === 200) {
-        window.location.href = '/get-started';
+        const cartData = userData?.cart || [];     
+        
+        localStorage.setItem('localCart', JSON.stringify(cartData));
+  
         sessionStorage.removeItem('userID');
         sessionStorage.removeItem('userData');
+
+        window.location.href = '/get-started';
       }
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
+  
 
   return (
     <>
@@ -61,6 +71,7 @@ const Header = () => {
                     ) :  
                         <NavDropdown title={userData.userName} id="collapsible-nav-dropdown">
                             <NavDropdown.Item onClick={() => setISOpen(!isOpen)}>Cart</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => setWISOpen(!wISOpen)}>Wishlist</NavDropdown.Item>
                             <NavDropdown.Item href="/my-orders">Orders</NavDropdown.Item>
                             <NavDropdown.Item href="#" onClick={(e) => {
                                 e.preventDefault();

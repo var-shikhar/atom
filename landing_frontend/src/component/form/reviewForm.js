@@ -1,10 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button, FormGroup, FormLabel } from 'react-bootstrap';
-import useAxioRequests from '../../../../frontend/src/function/axioRequest';
 import ROUTES from '../../util/routes';
 import VALIDATION from '../../util/validation';
+import { FireToast } from '../../context/toastContext';
+import useAxioRequests from '../../function/axioRequest';
 
-const ReviewForm = ({ id = '', handleConfirmation }) => {
+const ReviewForm = ({ id = '', productID = '', handleConfirmation }) => {
     const { HandlePostRequest } = useAxioRequests();
 
     async function handleProcessedFormData(values, imageKeys) {
@@ -25,6 +26,7 @@ const ReviewForm = ({ id = '', handleConfirmation }) => {
         <Formik
             initialValues={{
                 orderID: id,
+                productID: productID,
                 reviewText: '',
                 reviewImage: null,
             }}
@@ -32,7 +34,7 @@ const ReviewForm = ({ id = '', handleConfirmation }) => {
             validationSchema={VALIDATION.reviewFormValidation}
             onSubmit={async (values, { setSubmitting }) => {
                 try {
-                    const processedData = await handleProcessedFormData(values, [reviewImage])
+                    const processedData = await handleProcessedFormData(values, ['reviewImage'])
                     const response = await HandlePostRequest({
                         data: processedData,
                         route: ROUTES.commonReviewRoute,
@@ -50,9 +52,10 @@ const ReviewForm = ({ id = '', handleConfirmation }) => {
         >
             {({ errors, touched, dirty, isValid, setFieldValue }) => {
                 return (
-                    <Form className='row rounded border shadow-lg p-4 m-2'>
-                        <FormGroup className='col-12'>
-                            <FormLabel htmlFor="reviewText">Review Content</FormLabel>
+                    <Form className='row rounded border shadow-lg p-4 m-2 text-light'>
+                        <div className='col-12 my-2 fs-4'>Write a Review</div>
+                        <FormGroup className='col-12 mb-2'>
+                            <FormLabel htmlFor="reviewText" className='max-content me-auto d-block'>Review Content</FormLabel>
                             <Field
                                 name="reviewText"
                                 as="textarea"
@@ -62,8 +65,8 @@ const ReviewForm = ({ id = '', handleConfirmation }) => {
                             />
                             <ErrorMessage name="reviewText" component="div" className="invalid-feedback" />
                         </FormGroup>
-                        <FormGroup className='col-12 col-md-6 mb-2'>
-                            <FormLabel htmlFor="reviewImage">Supporting Image</FormLabel>
+                        <FormGroup className='col-12 mb-2'>
+                            <FormLabel htmlFor="reviewImage"  className='max-content me-auto d-block'>Supporting Image</FormLabel>
                             <input
                                 multiple
                                 type='file'
@@ -79,7 +82,7 @@ const ReviewForm = ({ id = '', handleConfirmation }) => {
                             <ErrorMessage name="reviewImage" component="div" className="invalid-feedback" />
                         </FormGroup>
 
-                        <div className='col-12 my-2 my-md-4'>
+                        <div className='col-12 my-2'>
                             <Button type="submit" variant="primary" className='mx-auto d-block' disabled={!(dirty && isValid)}>
                                 Post Review
                             </Button>

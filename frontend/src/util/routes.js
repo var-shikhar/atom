@@ -12,6 +12,7 @@ const commonProductRoute = `${BACKEND_ROUTES}/admin/product`;
 const commonProductVariationRoute = `${BACKEND_ROUTES}/admin/product/variation`;
 
 const commonOrderRoute = `${BACKEND_ROUTES}/admin/order`;
+const commonOrderDetailRoute = `${BACKEND_ROUTES}/admin/order/detail`;
 const commonOrderStatusRoute = `${BACKEND_ROUTES}/admin/order/status`;
 
 const commonCustomerRoute = `${BACKEND_ROUTES}/admin/customer`;
@@ -19,11 +20,7 @@ const commonCustomerDetailRoute = `${BACKEND_ROUTES}/admin/customer/detail`;
 
 const commonCouponRoute = `${BACKEND_ROUTES}/admin/coupon`;
 
-
-
-
-
-
+const commonContactLeadRoute = `${BACKEND_ROUTES}/admin/contact-lead`;
 
 
 
@@ -32,9 +29,9 @@ const ROUTES = {
     // Category Route
     commonCategoryRoute, commonSubCategoryRoute,
     commonProductRoute, commonProductVariationRoute,
-    commonOrderRoute, commonOrderStatusRoute,
+    commonOrderRoute, commonOrderStatusRoute, commonOrderDetailRoute,
     commonCustomerRoute, commonCustomerDetailRoute,
-    commonCouponRoute,
+    commonCouponRoute, commonContactLeadRoute,
 }
 
 export default ROUTES

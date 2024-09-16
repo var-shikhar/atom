@@ -12,6 +12,18 @@ const useMyOrder = () => {
     const { HandleGetRequest } = useAxioRequests();
     const navigate = useNavigate();
 
+    const [modalToggle, setModalToggle] = useState(false);
+    const [modalData, setModalData] = useState({
+        orderID: '',
+        title: '',
+        size: '',
+        mode: '',
+        productID: '',
+        review: {
+            text: '',
+            imageURL: '',
+        }
+    })
     const [searchText, setSearchText] = useState('')
     const [filterStatus, setFilterStatus] = useState('')
     const [filterDate, setFilterDate] = useState({
@@ -94,16 +106,29 @@ const useMyOrder = () => {
         navigate(`../my-orders/${orderID}`)
     }
 
+    // Handle Confirmation
+    function handleConfirmation(){
+        startTransition(() => {
+            setLoading(prev => ({...prev, list: true}))
+            setModalToggle(!modalToggle)
+        });
+    }
+
   return {
     searchText, 
     filterDate,
     filteredList,
     ORDER_STATUS,
     filterStatus,
+    modalToggle, 
+    modalData, 
+    setModalData,
+    setModalToggle,
     setSearchText,
     setFilterDate,
     setFilterStatus,
     handleOrderDetails,
+    handleConfirmation,
   }
 }
 

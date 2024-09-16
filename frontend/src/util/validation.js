@@ -146,12 +146,18 @@ const orderStatusFormValidation = Yup.object().shape({
         .required('Required Field!'),
 });
 
+const contactLeadStatusFormValidation = Yup.object().shape({
+    statusID: Yup.string()
+        .notOneOf([''], 'Invalid Status Type')
+        .required('Status is required!'),
+});
 
 const VALIDATION = {
     loginFormValidation, 
     categoryFormValidation, subCategoryFormValidation, 
     productFormValidation, productVariationFormValidation,
-    couponFormValidation, orderStatusFormValidation
+    couponFormValidation, orderStatusFormValidation,
+    contactLeadStatusFormValidation
 }
 
 export default VALIDATION;

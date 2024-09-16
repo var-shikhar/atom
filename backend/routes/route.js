@@ -11,6 +11,7 @@ import orderController from '../controller/order.js';
 import memberContoller from '../controller/member.js';
 import couponContoller from '../controller/coupon.js';
 
+import contactController from '../controller/contact.js';
 
 // import publicController  from '../controller/booking.js';
 
@@ -26,27 +27,23 @@ router.route('/admin/category/:categoryID').get(isAuth, categoryController.getIn
 
 router.route('/admin/subCategory').post(isAuth, subCategoryController.postSubCategory).put(isAuth, subCategoryController.putSubCategory).get(isAuth, subCategoryController.getSubCategoryList);
 router.route('/admin/subCategory/:categoryID').get(isAuth, subCategoryController.getInitSubCategory).put(isAuth, subCategoryController.putSubCategoryStatus).delete(isAuth, subCategoryController.deleteSubCategory);
-
 // Product Routes
 router.route('/admin/product/variation/:productID/:variationID').get(isAuth, variationController.getInitVariation).put(isAuth, variationController.putVariationStatus).delete(isAuth, variationController.deleteVariation);
 router.route('/admin/product/variation').post(isAuth, isMulterApproved, variationController.postVariation).put(isAuth, isMulterApproved, variationController.putVariation);
-
 router.route('/admin/product').post(isAuth, isMulterApproved, productController.postProduct).put(isAuth, isMulterApproved, productController.putProduct).get(isAuth, productController.getProductList);
 router.route('/admin/product/:productID').get(isAuth, productController.getInitProduct).put(isAuth, productController.putProductStatus).delete(isAuth, productController.deleteProduct);
-
 // Coupons
 router.route('/admin/coupon').post(isAuth, couponContoller.postCoupon).put(isAuth, couponContoller.putCoupon).get(isAuth, couponContoller.getCouponList);
 router.route('/admin/coupon/:couponID').get(isAuth, couponContoller.getInitCoupon).put(isAuth, couponContoller.putCouponStatus).delete(isAuth, couponContoller.deleteCoupon)
-
-
 // Customer Routes
 router.route('/admin/customer').get(isAuth, memberContoller.getMemberList);
-
 // Order Routes
 router.route('/admin/order').get(isAuth, orderController.getOrderList);
+router.route('/admin/order/:reqUserID').get(isAuth, orderController.getOrderList);
 router.route('/admin/order/status/:orderID?').get(isAuth, orderController.getStatusList).put(isAuth, orderController.putOrderStatusUpdate)
-router.route('/admin/order/:orderID').get(isAuth, orderController.getOrderDetail);
-
+router.route('/admin/order/detail/:orderID').get(isAuth, orderController.getOrderDetail);
+// Customer Routes
+router.route('/admin/contact-lead/:leadID?').get(isAuth, contactController.getContactLeadList).put(isAuth, contactController.putContactLeadStatus).delete(isAuth, contactController.deleteContactLead);
 
 
 // Public Routes
@@ -64,7 +61,11 @@ router.route('/public/latest-product').get(productController.getLatestProduct);
 router.route('/public/checkout').get(orderController.getAPIAddress).post(isAuth, orderController.postCheckout).put(isAuth, orderController.putOrderConfirmation);
 router.route('/public/order').post(isAuth, orderController.postGoToCheckout).put(isAuth, orderController.putValidateCoupon);
 
-router.route('/public/my-order').get(isAuth, orderController.getUserOrderList)
+router.route('/public/my-order').get(isAuth, orderController.getUserOrderList);
+router.route('/public/my-order/:orderID').get(isAuth, orderController.getPublicOrderDetail);
+router.route('/public/order-review').post(isAuth, isMulterApproved, orderController.postReview);
+
+router.route('/public/contact').post(contactController.postContactLead);
 
 router.use('/', async (req, res) => {
     console.log(req.originalUrl);

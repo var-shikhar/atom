@@ -1,11 +1,12 @@
 import React from 'react';
 import { useAuthContext } from '../context/authContext';
+import ContactLeadPanel from '../pages/admin/contactLead';
+import CouponPanel from '../pages/admin/couponPanel';
+import CustomerOrderPanel from '../pages/admin/customerOrder';
 import CustomerPanel from '../pages/admin/customerPanel';
 import OrderPanel from '../pages/admin/orderPanel';
 import ProductPanel from '../pages/admin/productPanel';
 import SettingPanel from '../pages/admin/settingPanel';
-import CouponPanel from '../pages/admin/couponPanel';
-import CustomerDetail from '../pages/admin/customerDetail';
 
 const adminRoutes = [
   {
@@ -32,9 +33,16 @@ const adminRoutes = [
   {
     id: crypto.randomUUID(),
     title: 'Customer List',
-    route: 'customers/:id',
+    route: 'customer/:id',
     isActiveRoute: false,
-    element: <CustomerDetail />
+    element: <CustomerOrderPanel />
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'Contact Lead',
+    route: 'contact-lead',
+    isActiveRoute: true,
+    element: <ContactLeadPanel />
   },
   {
     id: crypto.randomUUID(),

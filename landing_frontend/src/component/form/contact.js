@@ -4,6 +4,7 @@ import { Button, FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 import { FireToast } from '../../context/toastContext';
 import useAxioRequests from '../../function/axioRequest';
 import VALIDATION from '../../util/validation';
+import ROUTES from '../../util/routes';
 
 const ContactForm = () => {
     const {HandlePostRequest} = useAxioRequests();
@@ -21,7 +22,7 @@ const ContactForm = () => {
             try{
                 const response = await HandlePostRequest({
                     data: values,
-                    route: '',
+                    route: ROUTES.commonContactRoute,
                     type: 'post',
                     toastDescription: 'Request Query has raised successfuly!'
                 })

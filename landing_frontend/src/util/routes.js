@@ -25,6 +25,8 @@ const commonCustomerRoute = `${BACKEND_ROUTES}/admin/customer`;
 const commonCustomerDetailRoute = `${BACKEND_ROUTES}/admin/customer/detail`;
 
 
+const commonContactRoute = `${BACKEND_ROUTES}/public/contact`;
+
 
 
 
@@ -35,6 +37,7 @@ const ROUTES = {
     commonProductRoute, commonProductVariationRoute, getLatestProduct,
     commonCheckoutRoute, postGOTOCheckoutRoute,
     commonMyOrderRoute, commonReviewRoute,
+    commonContactRoute,
  
     
     commonCustomerRoute, commonCustomerDetailRoute,

@@ -86,6 +86,10 @@ body {
   border-color: green !important;
 }
 
+.mh-auto{
+  min-height: auto !important;
+}
+
 /* Till Here */
 /* Custom React-Select */
 .css-hlgwow{

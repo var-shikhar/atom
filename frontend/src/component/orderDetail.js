@@ -1,17 +1,16 @@
-import React, { useState, useEffect, startTransition } from 'react'
-import ROUTES from '../util/routes'
+import React, { startTransition, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router-dom'
 import useAxioRequests from '../function/axioRequest'
-import {useNavigate} from 'react-router-dom'
+import ROUTES from '../util/routes'
 
 const OrderDetail = ({id = ''}) => {
   const { HandleGetRequest } = useAxioRequests();
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [orderDetails, setOrderDetails] = useState({})
 
   useEffect(() => {
-    loading && id !== '' && handleGetRquest(`${ROUTES.commonOrderRoute}/${id}`)
+    loading && id !== '' && handleGetRquest(`${ROUTES.commonOrderDetailRoute}/${id}`)
   }, [loading, id]);
 
   // Fetch Lists from Server
@@ -121,7 +120,13 @@ const OrderDetail = ({id = ''}) => {
               <div className=''>
                 <small className=''>Feedback: </small>
                 <div className=''>{orderDetails.feedback?.text}</div> 
-                {orderDetails.feedback?.image !== '' && <Button type='button' className='d-block mx-auto my-2 my-md-4' size='sm' onClick={() => navigate(orderDetails.feedback?.image)}>View Image</Button>}
+                {orderDetails.feedback?.image !== '' && 
+                  <Link to={orderDetails.feedback?.image}>
+                    <Button type='button' className='d-block mx-auto my-2 my-md-4' size='sm'>
+                      View Image
+                    </Button>
+                  </Link>
+                }
 
               </div>
             </div>

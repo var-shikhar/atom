@@ -182,6 +182,11 @@ const useCheckout = () => {
     // Handle Coupon Validation
     async function handleCouponValidation() {
         setLoading(prev => ({...prev, isVerifying: true}));
+        let rtnObj = {
+            hasDiscount: false,
+            discount: 0, 
+            finalAmount: submissionData.totalAmount
+        }
         const response = await HandlePostRequest({
             route: ROUTES.postGOTOCheckoutRoute,
             data: {code: couponCode, totalAmount: submissionData.totalAmount},
@@ -193,14 +198,22 @@ const useCheckout = () => {
             const { discount, finalAmount } = response.data;
             startTransition(() => {
                 setLoading(prev => ({...prev, isValidCoupon: true}));
-                setSubmissionData(prev => ({
-                    ...prev, 
+                rtnObj = {
                     hasDiscount: true,
                     discount: discount, 
                     finalAmount: finalAmount
-                }))
+                };
             })
         }
+
+        startTransition(() => {
+            setSubmissionData(prev => ({
+                ...prev, 
+                hasDiscount: rtnObj.hasDiscount,
+                discount: rtnObj.discount, 
+                finalAmount: rtnObj.finalAmount
+            }))
+        })
 
     }
 

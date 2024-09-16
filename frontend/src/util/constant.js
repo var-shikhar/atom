@@ -26,6 +26,25 @@ const ORDER_STATUS = [
     },
 ]
 
-const CONSTANT = { ORDER_STATUS }
+const CONTACT_LEAD_STATUS = [
+    {
+        id: 1,
+        status: 'Processing',
+        slug: 'Processing'
+    },
+    {
+        id: 2,
+        status: 'Resolved',
+        slug: 'Resolved'
+    },
+    {
+        id: 3,
+        status: 'Rejected',
+        slug: 'Rejected'
+    },
+]
+
+
+const CONSTANT = { ORDER_STATUS, CONTACT_LEAD_STATUS }
 
 export default CONSTANT; 

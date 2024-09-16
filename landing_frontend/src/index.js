@@ -10,19 +10,24 @@ import { ToastProvider } from './context/toastContext';
 import { AuthContextProvider } from './context/authContext';
 import CartList from './component/cartList';
 import { CartProvider } from './context/cartContext';
+import WishList from './component/wishlList';
+import { WishListProvider } from './context/wishlistContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ToastProvider>
       <LoaderProvider>
-        <AuthContextProvider>
-          <CartProvider>
-            <Loader />
-            <CartList />
-            <App />
-          </CartProvider>
-        </AuthContextProvider>
+        <CartProvider>
+          <AuthContextProvider>
+            <WishListProvider>
+              <Loader />
+              <CartList />
+              <WishList />
+              <App />
+            </WishListProvider>
+          </AuthContextProvider>
+        </CartProvider>
       </LoaderProvider>
     </ToastProvider>
   </React.StrictMode>

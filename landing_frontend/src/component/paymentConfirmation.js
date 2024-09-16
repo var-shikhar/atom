@@ -14,7 +14,7 @@ const PaymentConfirmation = ({data}) => {
                     <FaCheckCircle  className='bg-inherit' size={50}/>
                     <div className='bg-inherit'>
                         Dear <span className='fs-4 text-light bg-inherit'>{data.buyerName}</span>, <br />
-                        We've Received your order (ID: {data.orderID}) of Amount (₹ {data.buyerName}/-)
+                        We've Received your order (ID: {data.orderID}) of Amount (₹ {data.orderAmount}/-)
                     </div>
                 </div>
             </Modal.Body>

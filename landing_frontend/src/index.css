@@ -79,7 +79,7 @@ code {
     monospace;
 }
 
-.bg-light, .bg-light *{
+.bg-light, .bg-light *, option{
   background-color: var(--light-3) !important;
 }
 
@@ -98,6 +98,8 @@ code {
 /* Toast */
 .toast-container{
   background-color: transparent;
+  position: fixed;
+  top: 1rem;
 } 
 
 .toast-container > *, .toast-header > strong, .toast-header > small {
@@ -133,6 +135,24 @@ code {
   }
 }
 
+/* Modal */
+.modal-header .closeButton{
+  position: absolute;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 1px solid var(--light-3);
+  border-radius: 10px;
+  transition: all 0.1ms ease-in-out;
+}
+
+.modal-header .closeButton:is(:hover, :focus-visible, :focus-within, :active){
+  background-color: var(--light-3);
+  transition: all 0.1ms ease-in-out;
+}
 
 /* Navbar */
 
