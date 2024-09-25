@@ -2,8 +2,8 @@ const BACKEND_ROUTES = 'https://atom-7y9m.onrender.com';
 // const BACKEND_ROUTES = 'http://localhost:8081';
 
 
-const loginRoute = `${BACKEND_ROUTES}/auth/login`;
-const logoutRoute = `${BACKEND_ROUTES}/auth/logout`;
+const loginRoute = `${BACKEND_ROUTES}/admin/auth/login`;
+const logoutRoute = `${BACKEND_ROUTES}/admin/auth/logout`;
 
 const commonCategoryRoute = `${BACKEND_ROUTES}/admin/category`;
 const commonSubCategoryRoute = `${BACKEND_ROUTES}/admin/subCategory`;

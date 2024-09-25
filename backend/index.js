@@ -24,7 +24,6 @@ app.use(cors({
     credentials: true
 }));
 
-
 cloudinary.v2.config({
     cloud_name: CLOUDINARY_NAME,
     api_key: CLOUDINARY_APIKEY,
@@ -35,15 +34,25 @@ cloudinary.v2.config({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// Fallback route
 
+// Serve the main frontend
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+app.get('/admin/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+});
+
+// Serve the landing frontend
+app.use(express.static(path.join(__dirname, 'landing_frontend', 'build')));
+app.get('/public/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'landing_frontend', 'build', 'index.html'));
+});
 
 import routeHandler from './routes/route.js';
 app.use('/', routeHandler);
 
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 
 mongoose.connection.once('connected', async () => {
     // Start the server after the initial updates

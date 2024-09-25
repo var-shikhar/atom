@@ -10,16 +10,13 @@ import variationController from '../controller/variation.js';
 import orderController from '../controller/order.js';
 import memberContoller from '../controller/member.js';
 import couponContoller from '../controller/coupon.js';
-
 import contactController from '../controller/contact.js';
-
-// import publicController  from '../controller/booking.js';
 
 const router = express.Router();
 
 // Auth Routes
-router.route('/auth/login').post(authController.postLogin);
-router.route('/auth/logout').get(isAuth, authController.getLogout);
+router.route('/admin/auth/login').post(authController.postLogin);
+router.route('/admin/auth/logout').get(isAuth, authController.getLogout);
 
 // Category and SubCategory
 router.route('/admin/category').post(isAuth, categoryController.postCategory).put(isAuth, categoryController.putCategory).get(isAuth, categoryController.getCategoryList);
