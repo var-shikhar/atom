@@ -6,7 +6,7 @@ const Home = () => {
     const navigate = useNavigate()
     return (
         <div className='text-light d-flex align-items-center justify-content-center gap-2 flex-column my-2 my-md-4'>
-            <div>You're not authenticated, Login to access the portal!</div>
+            <div>Welcom to Atom Admin Panel!</div>
             <Button type='button' className='w-auto' onClick={() => navigate(`../login`)}>Proceed to Login</Button>         
         </div>
     )

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { CiViewList } from "react-icons/ci";
-import { FaEdit, FaEye, FaTrashAlt, FaUserCheck, FaUserSlash } from 'react-icons/fa';
+import { FaEdit, FaEye, FaSort, FaTrashAlt, FaUserCheck, FaUserSlash } from 'react-icons/fa';
 import PRODUCT_FORM from '../../component/forms/admin/product';
 import ModalWrapper from '../../component/modalWrapper';
 import useProduct from '../../hooks/admin/useProduct';
 
 const ProductPanel = () => {
-    const { filteredList, searchText, ddownToggle, modalToggle, modalData, setModalToggle, setModalData, setSearchText, setDDownToggle, handleProductNavigation, handleProductDeletion, handleConfirmation, handleProductVariationDeletion, handleProductStatusUpdate, handleVariationStatusUpdate } = useProduct();
+    const { filteredList, searchText, ddownToggle, modalToggle, modalData, setModalToggle, setModalData, setSearchText, setDDownToggle, handleProductNavigation, handleProductDeletion, handleConfirmation, handleProductVariationDeletion, handleProductStatusUpdate, handleVariationStatusUpdate, handleTableSorting } = useProduct();
    
 
     function handleModalToggle(id, mode, title, variID){
@@ -27,14 +27,39 @@ const ProductPanel = () => {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Product SKU</th>
-                            <th>Product Name</th>
-                            <th className='text-center'>Product Category</th>
-                            <th className='text-center'>Product Type</th>
-                            <th className='text-center'>Variation Type</th>
-                            <th className='text-center'>Product MRP</th>
-                            <th className='text-center'>Available Quanity</th>
-                            <th className='text-center'>Interact</th>
+                            <th>
+                                <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                    Product SKU
+                                    <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('baseSku')} />
+                                </div>
+                            </th>
+                            <th><div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>Product Name</div></th>
+                            <th><div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>Product Category</div></th>
+                            <th className='text-center'>
+                                <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                    Product Type
+                                    <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('isVariationProduct')} />
+                                </div>
+                            </th>
+                            <th className='text-center'>
+                                <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                    Variation Type
+                                    <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('variationName')} />
+                                </div>
+                            </th>
+                            <th className='text-center'>
+                                <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                    Product MRP
+                                    <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('baseMRPPrice')} />
+                                </div>
+                            </th>
+                            <th className='text-center'>
+                                <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                    Available Quanity
+                                    <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('baseStock')} />
+                                </div>
+                            </th>
+                            <th><div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>Interact</div></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +72,11 @@ const ProductPanel = () => {
                                     <td className='text-center'>{product.categoryId.name}</td>
                                     <td className='text-center'>{product.isVariationProduct ? 'Variation' : 'Single'}</td>
                                     <td className='text-center'>{product.variationName}</td>
-                                    <td className='text-center'><small className='text-decoration-line-through me-2'>₹ {product.baseMRPPrice}/-</small> ₹ {product.baseSellingPrice}/-</td>
+                                    <td>
+                                        <div className='text-center max-content'>
+                                            <small className='text-decoration-line-through me-2'>₹ {product.baseMRPPrice}/-</small> ₹ {product.baseSellingPrice}/-
+                                        </div>
+                                    </td>
                                     <td className='text-center'>{product.baseStock} {product.baseStock?.length > 0 ? 'PCs' : 'PC'}</td>
                                     <td>
                                         <div className="d-flex gap-2 w-100 justify-content-center align-items-center">

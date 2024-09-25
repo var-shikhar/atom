@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Table from 'react-bootstrap/Table';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { FaEdit, FaTrashAlt, FaUserCheck, FaUserSlash } from 'react-icons/fa';
+import { FaEdit, FaSort, FaTrashAlt, FaUserCheck, FaUserSlash } from 'react-icons/fa';
 import CouponForm from '../../component/forms/admin/coupon';
 import ModalWrapper from '../../component/modalWrapper';
 import useCoupon from '../../hooks/admin/useCoupon';
@@ -44,16 +44,66 @@ const CouponPanel = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('code')}>Coupon Code</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('startDate')}>Start Date</th>
-                        <th className='cursor-pointer'  onClick={() => handleTableSorting('expirationDate')}>End Date</th>
-                        <th className='cursor-pointer'  onClick={() => handleTableSorting('discountType')}>Discount Type</th>
-                        <th className='cursor-pointer'  onClick={() => handleTableSorting('discountValue')}>Discount Amount</th>
-                        <th className='cursor-pointer text-center'  onClick={() => handleTableSorting('minOrderAmount')}>Min Order Amount</th>
-                        <th className='cursor-pointer'  onClick={() => handleTableSorting('maxDiscount')}>Max Discount</th>
-                        <th className='cursor-pointer text-center'  onClick={() => handleTableSorting('usageLimit')}>Limit</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('usedCount')}>Used By</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('isActive')}>Status</th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                Coupon Code
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('code')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                Start Date
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('startDate')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                End Date
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('expirationDate')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Discount Type
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('discountType')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Discount Amount
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('discountValue')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Min Order Amount
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('minOrderAmount')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Max Discount
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('maxDiscount')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Usage Limit
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('usageLimit')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Used By
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('usedCount')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Status
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('isActive')} />
+                            </div>
+                        </th>
                         <th>Interact</th>
                     </tr>
                 </thead>

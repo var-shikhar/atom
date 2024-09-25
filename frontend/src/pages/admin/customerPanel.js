@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { CiViewList } from 'react-icons/ci';
 import useCustomer from '../../hooks/admin/useCustomer';
+import { FaSort } from 'react-icons/fa';
 
 const CustomerPanel = () => {
     const { filteredList, searchText, setSearchText, handleCustomerDetail, handleTableSorting } = useCustomer();
@@ -21,11 +22,31 @@ const CustomerPanel = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('userName')}>Customer Name</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('email')}>Customer Email</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('email')}>Customer Phone</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('phone')}>Total Order Amount</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('totalOrderAmount')}>Interact</th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                Customer Name
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('userName')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Customer Email
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('userEmail')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Customer Phone
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('userPhone')} />
+                            </div>
+                        </th>
+                        <th> 
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Total Order Amount
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('totalAmount')} />
+                            </div>
+                        </th>
+                        <th><div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>Interact</div></th>
                     </tr>
                 </thead>
                 <tbody>

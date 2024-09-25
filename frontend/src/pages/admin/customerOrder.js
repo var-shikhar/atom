@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Table from 'react-bootstrap/Table';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaSort } from 'react-icons/fa';
 import { TbStatusChange } from "react-icons/tb";
 import ModalWrapper from '../../component/modalWrapper';
 import useOrder from '../../hooks/admin/useOrder';
@@ -44,15 +44,30 @@ const CustomerOrderPanel = () => {
                 </div>
             </div>
             <Table hover responsive>
-                <thead>
+            <thead>
                     <tr>
                         <th>#</th>
                         <th>Order ID & Date</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('buyerName')}>Buyer Name</th>
-                        <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('finalAmount')}>Order Value</th>
-                        <th className='text-center'>Shipping Address</th>
-                        <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('paymentMode')}>Payment Mode</th>
-                        <th className='text-center cursor-pointer'  onClick={() => handleTableSorting('status')}>Status</th>
+                        <th>Buyer Name</th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Order Value
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('finalAmount')} />
+                            </div>
+                        </th>
+                        <th><div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>Shipping Address</div></th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Payment Mode
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('paymentMode')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Status
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('status')} />
+                            </div>
+                        </th>
                         <th className='text-center'>Interact</th>
                     </tr>
                 </thead>

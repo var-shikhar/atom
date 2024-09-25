@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Table from 'react-bootstrap/Table';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaSort, FaTrashAlt } from 'react-icons/fa';
 import ContactLeadStatusForm from '../../component/forms/admin/contactLeadStatus';
 import ModalWrapper from '../../component/modalWrapper';
 import useContactLead from '../../hooks/admin/useContactLead';
@@ -43,12 +43,31 @@ const ContactLeadPanel = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('createdAt')}>Query Date</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('userName')}>User Name</th>
-                        <th className='cursor-pointer' onClick={() => handleTableSorting('email')}>User Email</th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                Query Date
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('createdAt')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center gap-2 max-content bg-white'>
+                                User Name <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('userName')} />
+                            </div>
+                        </th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center  gap-2 max-content bg-white'>
+                                User Email
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('email')} />
+                            </div>
+                        </th>
                         <th>User Phone</th>
                         <th>Message</th>
-                        <th className='text-center cursor-pointer' onClick={() => handleTableSorting('status')}>Status</th>
+                        <th>
+                            <div className='w-100 d-flex align-items-center justify-content-center gap-2 max-content bg-white'>
+                                Status
+                                <FaSort className='cursor-pointer bg-white' onClick={() => handleTableSorting('status')} />
+                            </div>
+                        </th>
                         <th className='text-center'>Interact</th>
                     </tr>
                 </thead>

@@ -15,6 +15,7 @@ const useProduct = () => {
     const [productList, setProductList] = useState([])
     const [filteredList, setFilteredList] = useState([])
 
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
     const [ddownToggle, setDDownToggle] = useState({});
     const [searchText, setSearchText] = useState('')
     const [modalToggle, setModalToggle] = useState(false);
@@ -156,23 +157,53 @@ const useProduct = () => {
         })
     }
 
-  return {
-    filteredList,
-    searchText,
-    ddownToggle, 
-    modalToggle,
-    modalData, 
-    setModalToggle,
-    setModalData,
-    setDDownToggle, 
-    setSearchText,
-    handleProductNavigation,
-    handleProductDeletion,
-    handleProductVariationDeletion,
-    handleConfirmation,
-    handleProductStatusUpdate,
-    handleVariationStatusUpdate
-  }
+     // Handle Table Sorting
+     function handleTableSorting(key){
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+
+        const tempSortedUsers = [...filteredList].sort((a, b) => {
+            if (sortConfig.key) {
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+
+                if (aValue < bValue) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+            }
+            return 0;
+        });
+
+        startTransition(() => {
+            setFilteredList(tempSortedUsers)
+        })
+    }
+
+
+    return {
+        filteredList,
+        searchText,
+        ddownToggle, 
+        modalToggle,
+        modalData, 
+        setModalToggle,
+        setModalData,
+        setDDownToggle, 
+        setSearchText,
+        handleProductNavigation,
+        handleProductDeletion,
+        handleProductVariationDeletion,
+        handleConfirmation,
+        handleProductStatusUpdate,
+        handleVariationStatusUpdate,
+        handleTableSorting
+    }
 }
 
 export default useProduct
