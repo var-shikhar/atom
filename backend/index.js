@@ -35,12 +35,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // Fallback route
-app.use('/public', express.static(path.join(__dirname, 'landing_frontend', 'build')));
-app.use('/admin', express.static(path.join(__dirname, 'frontend', 'build')));
+// app.use('/public', express.static(path.join(__dirname, 'landing_frontend', 'build')));
+// app.use('/admin', express.static(path.join(__dirname, 'frontend', 'build')));
 
-app.get('/public/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'landing_frontend', 'build', 'index.html'));
-});
+// app.get('/public/*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'landing_frontend', 'build', 'index.html'));
+// });
 
 // app.get('/admin/*', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
