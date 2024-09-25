@@ -7,8 +7,9 @@ import useMyOrder from '../../hooks/useMyOrder';
 
 const MyOrder = () => {
     const {filterDate, filteredList, searchText, ORDER_STATUS, filterStatus, modalToggle, modalData, setModalData, setModalToggle, setFilterDate, setSearchText, setFilterStatus, handleOrderDetails, handleConfirmation} = useMyOrder();
-    function handleReviewModal(id, productID, title, size, mode, text, imageURL){
-        setModalData({mode: mode, orderID: id, productID: productID, size: size, title: title, review : {imageURL: imageURL, text: text}});
+    
+    function handleReviewModal(id, productID, title, size, mode, text, imageURL, rating){
+        setModalData({mode: mode, orderID: id, productID: productID, size: size, title: title, review : {imageURL: imageURL, text: text, rating: rating}});
         setModalToggle(!modalToggle)
     }
     return (
@@ -76,13 +77,16 @@ const MyOrder = () => {
                                                                     <img src={product.productImage} width={40} height={40} className='object-fit-cover rounded' />
                                                                     <div>
                                                                         <div>{product.productName}</div>
-                                                                        <div>{product.productQty} {product.productQty > 1 ? 'PCs' : 'PC'}</div>
+                                                                        <div>
+                                                                            {product.productQty} {product.productQty > 1 ? 'PCs' : 'PC'}
+                                                                            {product.variationType !== '' && <small className='bg-light px-2 ms-2 rounded text-dark'>{product.variationType}</small>}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 {(item.status === 'Delivered' || item.status === 'Returned') && <>
                                                                     {!product.hasFeedback  
                                                                         ? <Button type='button' size='sm' onClick={() => handleReviewModal(item.orderID, product.productID, 'Write a reivew', 'md', 'Form', '', '')}>Write a Review</Button> 
-                                                                        : <Button type='button' size='sm'  onClick={() => handleReviewModal(item.orderID, product.productID, 'View your reivew', 'md', 'View', product?.feedback?.text, product?.feedback?.image)}>View Review</Button>
+                                                                        : <Button type='button' size='sm'  onClick={() => handleReviewModal(item.orderID, product.productID, 'View your reivew', 'md', 'View', product?.feedback?.text, product?.feedback?.image, product?.feedback?.rating)}>View Review</Button>
                                                                     }
                                                                 </>}
                                                             </div>
@@ -115,7 +119,7 @@ const MyOrder = () => {
             <ModalWrapper toggle={modalToggle} setToggle={setModalToggle} title={modalData.title} size={modalData.size}>
                 {modalData.mode === 'Form' 
                     ? <ReviewForm id={modalData.orderID} productID={modalData.productID} handleConfirmation={handleConfirmation} />
-                    : <ViewReview imageURL={modalData.review.imageURL} text={modalData.review.text} />
+                    : <ViewReview imageURL={modalData.review.imageURL} text={modalData.review.text} rating={modalData.review.rating} />
                 }
             </ModalWrapper>
         </section>

@@ -118,6 +118,7 @@ const reviewFormValidation = Yup.object().shape({
         .min(5, 'Min 5 Characters are required!')
         .max(5000, 'Max 5000 Characters are allowed!')
         .required('Required Field!'),
+    rating: Yup.number().min(1, 'At least 1 star is required.').max(5, 'You can give a maximum of 5 stars.'),
     reviewImage: Yup.mixed()
         .test('fileSize', 'File size too large, Max limit is 1MB', function (value) {
             if (!value) return true; 

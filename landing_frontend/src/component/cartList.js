@@ -1,3 +1,4 @@
+import { startTransition, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
@@ -10,7 +11,34 @@ const CartList = () => {
   const { userID, userData } = useAuthContext()
   const { handleAddtoCart, handleGoToCheckout } = useOrder();
 
-  
+  const [localCart, setLocalCart] = useState(JSON.parse(localStorage.getItem('localCart')) || []);
+  const [productList, setProductList] = useState([])
+
+  // Trigger Cart Update
+  useEffect(() => {
+    const handleStorageChange = () => {
+        const updatedCart = JSON.parse(localStorage.getItem('localCart')) || [];
+        setLocalCart(updatedCart);
+    };
+
+    // Listen for the custom event
+    window.addEventListener('localCartUpdated', handleStorageChange);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+        window.removeEventListener('localCartUpdated', handleStorageChange);
+        window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  // Update Product Cart
+  useEffect(() => {
+    const updatedCart = userID && userData?.cart ? userData.cart : localCart;
+    startTransition(() => {
+      setProductList(updatedCart)
+    })      
+  }, [userID, userData, localCart])
+
   if(isOpen === undefined){
     return 
   }
@@ -24,9 +52,9 @@ const CartList = () => {
         </Offcanvas.Header>
         <Offcanvas.Body className='position-relative'>
           <div className='h-100 w-100 overflow-y-scroll'>
-            {(userID ? userData?.cart : JSON.parse(localStorage.getItem('localCart')))?.length > 0 ? 
+            {productList?.length > 0 ? 
               <div className='d-flex gap-3 flex-column text-light'>
-                {(userID ? userData?.cart : JSON.parse(localStorage.getItem('localCart')))?.map((item) => (
+                {productList?.map((item) => (
                   <div key={item.id} className='row'>
                     <div className='col-3'>
                       <img src={item.coverImage} className='w-100 rounded h-auto object-fit-cover' />
@@ -34,20 +62,15 @@ const CartList = () => {
                     <div className='col-9 d-flex flex-column gap-2'>
                       <div className='fs-5'>{item.productName}</div>
                       <div className='d-flex gap-2 align-items-center'>
-                        <Button type='button' className='border-light' size='sm' onClick={() => {
-                          setISOpen(!isOpen);
-                          handleAddtoCart(item.productId, item.variationID, item.isVariation, 'Subtract', false)
-                        }}>
+                        <Button type='button' className='border-light' size='sm' onClick={() => handleAddtoCart(item.productId, item.variationID, item.isVariation, item.variationType, 'Subtract', false)}>
                           <FaMinusCircle/>
                         </Button>
                         <div className='bg-light rounded px-2 fs-5 text-dark'>{item.productQuantity}</div>
-                        <Button type='button' className='border-light' size='sm' onClick={() => {
-                          setISOpen(!isOpen);
-                          handleAddtoCart(item.productId, item.variationID, item.isVariation, 'Add', false)
-                        }}>
+                        <Button type='button' className='border-light' size='sm' onClick={() => handleAddtoCart(item.productId, item.variationID, item.isVariation, item.variationType, 'Add', false)}>
                           <FaPlusCircle />
                         </Button>
-                    </div>
+                        <small className='bg-light rounded px-2 text-dark max-content'>{item.variationType}</small>
+                      </div>
                     </div>
                   </div>
                 ))}

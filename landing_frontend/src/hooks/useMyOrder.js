@@ -22,6 +22,7 @@ const useMyOrder = () => {
         review: {
             text: '',
             imageURL: '',
+            rating: 0,
         }
     })
     const [searchText, setSearchText] = useState('')

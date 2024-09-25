@@ -175,7 +175,10 @@ const Checkout = () => {
                                                                 <img src={item.coverImage} width={50} height={50} className='rounded object-fit-cover' />
                                                                 <div>
                                                                     <div className='fs-6 '>{item.productName}</div>
-                                                                    <div className='max-content'>₹ {item.productPrice}</div>
+                                                                    <div className='max-content'>
+                                                                        ₹ {item.productPrice}
+                                                                        {item.isVariation && <span className='ms-2 bg-light text-dark rounded px-2'>{item.variationType}</span>}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div className='d-flex gap-2 w-25'>

@@ -596,8 +596,15 @@ button:is(:hover, :focus-visible, :focus-visible) {
 .product-detail-card > div,
 .product-detail-card > div > div,
 .product-detail-card > div > span,
-.product-detail-card > div > div > button {
+.product-detail-card > div > div > button,
+.product-deatil-wrapper #reviews,
+.product-deatil-wrapper #reviews > div > *,
+.product-deatil-wrapper #reviews > div > div > *,
+.product-deatil-wrapper #reviews > div > div > div > *,
+.product-deatil-wrapper #reviews > div > div > div > div > *,
+.product-deatil-wrapper #reviews > div > div > div > div > div > *{
   background-color: var(--white);
+  color: var(--dark-1);
 }
 
 .product-detail-btn{

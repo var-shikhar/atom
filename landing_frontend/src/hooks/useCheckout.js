@@ -107,9 +107,9 @@ const useCheckout = () => {
             };
 
             userData?.cart.forEach(item => {
-                const productTax = item.productPrice * (item.productTax / 100);
-                totalObj.subTotal += item.productPrice * item.productQuantity;
-                totalObj.totalTax += productTax * item.productQuantity;
+                const productTax = Number(item.productPrice) * (Number(item.productTax) / 100);
+                totalObj.subTotal += Number(item.productPrice) * Number(item.productQuantity);
+                totalObj.totalTax += Number(productTax) * Number(item.productQuantity);
             });
 
             const tempTotalAmount =  totalObj.subTotal + totalObj.totalTax;

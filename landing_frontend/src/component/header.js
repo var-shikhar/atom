@@ -4,13 +4,14 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { GiShoppingBag } from "react-icons/gi";
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
+import { useCart } from '../context/cartContext';
+import { useWishList } from '../context/wishlistContext';
 import useAxioRequests from '../function/axioRequest';
 import ContentRoute from '../routes/routes';
 import ROUTES from '../util/routes';
-import { useCart } from '../context/cartContext';
-import { useWishList } from '../context/wishlistContext';
 
 
 const Header = () => {
@@ -64,13 +65,15 @@ const Header = () => {
                         )
                         }
                     })}
+                    <div className='nav-link cursor-pointer' onClick={() => setISOpen(!isOpen)}>
+                        <GiShoppingBag />
+                    </div>
                     {(userID === '' || userID === undefined || userID === null) ? (
                         <li className="nav-item">
                             <Link to="/get-started" className="nav-link">Get Started</Link>
                         </li>
                     ) :  
                         <NavDropdown title={userData.userName} id="collapsible-nav-dropdown">
-                            <NavDropdown.Item onClick={() => setISOpen(!isOpen)}>Cart</NavDropdown.Item>
                             <NavDropdown.Item onClick={() => setWISOpen(!wISOpen)}>Wishlist</NavDropdown.Item>
                             <NavDropdown.Item href="/my-orders">Orders</NavDropdown.Item>
                             <NavDropdown.Item href="#" onClick={(e) => {

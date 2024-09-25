@@ -105,6 +105,7 @@ const postPublicRegister = async (req, res) => {
             userName: savedUser.firstName + ' ' + savedUser.lastName,
             userPhone: savedUser.phone,
             cart: [],
+            wishlist: [],
         };
         res.status(RouteCode.SUCCESS.statusCode).json(returnedData);
     } catch (err) {
@@ -138,6 +139,7 @@ const postPublicLogin = async (req, res) => {
             userName: validateUser.firstName + ' ' + validateUser.lastName,
             userPhone: validateUser.phone,
             cart: validateUser.cart,
+            wishlist: validateUser.wishlist,
         };
 
         return res.status(RouteCode.SUCCESS.statusCode).json(returnedData);

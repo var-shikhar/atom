@@ -61,6 +61,8 @@ router.route('/public/latest-product').get(productController.getLatestProduct);
 router.route('/public/checkout').get(orderController.getAPIAddress).post(isAuth, orderController.postCheckout).put(isAuth, orderController.putOrderConfirmation);
 router.route('/public/order').post(isAuth, orderController.postGoToCheckout).put(isAuth, orderController.putValidateCoupon);
 
+router.route('/public/wishlist').post(isAuth, orderController.postWishListItems)
+
 router.route('/public/my-order').get(isAuth, orderController.getUserOrderList);
 router.route('/public/my-order/:orderID').get(isAuth, orderController.getPublicOrderDetail);
 router.route('/public/order-review').post(isAuth, isMulterApproved, orderController.postReview);

@@ -1,11 +1,11 @@
-import { Link, useParams } from "react-router-dom";
-import useOrderDetail from "../../hooks/useOrderDetail";
-import { Button } from "react-bootstrap";
 import React from "react";
+import { Button } from "react-bootstrap";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import ReviewForm from "../../component/form/reviewForm";
 import ModalWrapper from "../../component/modalWrapper";
 import ViewReview from "../../component/viewReview";
-import ReviewForm from "../../component/form/reviewForm";
+import useOrderDetail from "../../hooks/useOrderDetail";
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -85,22 +85,27 @@ const OrderDetails = () => {
                                     {orderDetail.products.map((item, index) => 
                                         <React.Fragment key={item._id}>
                                             <div className='d-flex align-items-center justify-content-between w-100'>
-                                                <div className='d-flex'>
-                                                    <img src={item.productImage} width={50} height={50} className='rounded'/>
-                                                    <div className='ps-2'> 
-                                                        <div className='text-truncate'>{item.productName}</div>
-                                                        <div className="d-flex align-items-center gap-1">
-                                                            <span>{item.productSKU}</span> <span>{item.variationType}</span>
-                                                            {(orderDetail.status === 'Delivered' || orderDetail.status === 'Returned') && <>
-                                                                {!item.hasFeedback  
-                                                                    ? <Button type='button' className="py-0" size='sm' onClick={() => handleReviewModal(orderDetail._id, item._id, 'Write a reivew', 'md', 'Form', '', '')}>Write a Review</Button> 
-                                                                    : <Button type='button' className="py-0" size='sm'  onClick={() => handleReviewModal(orderDetail._id, item._id, 'View your reivew', 'md', 'View', item?.feedback?.text, item?.feedback?.image)}>View Review</Button>
-                                                                }
-                                                            </>}
+                                                <div className='d-flex w-75 align-items-center justify-content-between'>
+                                                    <div className="d-flex">
+                                                        <img src={item.productImage} width={50} height={50} className='rounded'/>
+                                                        <div className="d-flex flex-column ps-2">
+                                                            <div className='text-truncate'>{item.productName}</div>
+                                                            <div>
+                                                                <span>{item.productSKU}</span> 
+                                                                {item.variationType !== '' && <small className='bg-light px-2 ms-2 rounded text-dark'>{item.variationType}</small>}
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <div className="me-2">
+                                                        {(orderDetail.status === 'Delivered' || orderDetail.status === 'Returned') && <>
+                                                            {!item.hasFeedback  
+                                                                ? <Button type='button' className="py-0" size='sm' onClick={() => handleReviewModal(orderDetail._id, item._id, 'Write a reivew', 'md', 'Form', '', '')}>Write a Review</Button> 
+                                                                : <Button type='button' className="py-0" size='sm'  onClick={() => handleReviewModal(orderDetail._id, item._id, 'View your reivew', 'md', 'View', item?.feedback?.text, item?.feedback?.image)}>View Review</Button>
+                                                            }
+                                                        </>}
+                                                    </div>
                                                 </div>
-                                                <div className='d-flex flex-column me-md-2'>
+                                                <div className='d-flex flex-column me-md-2 w-25'>
                                                     <div>{item.productQuantity} {item.productQuantity > 1 ? 'PCs' : 'PC'}</div>
                                                     <div>₹ {item.productPrice}/-</div>
                                                 </div>

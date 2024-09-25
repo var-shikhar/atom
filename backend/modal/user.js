@@ -78,6 +78,15 @@ const UserSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
             required: true
+        },
+        isVariation:  {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        variationID:  {
+            type: String,
+            required: false,
         }
     }],
 }, { timestamps: true });

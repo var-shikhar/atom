@@ -186,10 +186,12 @@ const getUserOrderList = async (req, res) => {
                         productName: productEntry.productId?.name,
                         productImage: product.images?.length > 0 ? product.images[0] : productEntry.productId.images[0],
                         productQty: productEntry.quantity,
+                        variationType: productEntry.isVariation ? product.value : '',
                         hasFeedback: productEntry.hasFeedback,
                         feedback: {
                             text: productEntry.feedback.text,
                             image: productEntry.feedback.image,
+                            rating: productEntry.feedback.rating,
                         }
                     };
                 }),
@@ -197,6 +199,7 @@ const getUserOrderList = async (req, res) => {
                 feedback: {
                     text: item.feedback?.text,
                     image: item.feedback?.image,
+                    rating: item.feedback?.rating,
                 },
                 status: item.status,
             };
@@ -319,7 +322,7 @@ const postGoToCheckout = async (req, res) => {
             return {
                 productId: item.productId,
                 productQuantity: item.productQuantity,
-                isVariation: item.isVariation,
+                isVariation: item.isVariation === '' ? false : item.isVariation,
                 variationID: item.variationID,
             }
         })
@@ -360,7 +363,7 @@ const postCheckout = async (req, res) => {
             finalAmount: finalAmount,
             products: products?.map(item => ({
                 productId: item.productId,
-                isVariation: item.isVariation,
+                isVariation: item.isVariation === '' ? false : item.isVariation,
                 quantity: item.productQuantity,
                 variationId: item.variationID,
                 price: item.productPrice,
@@ -419,10 +422,48 @@ const postCheckout = async (req, res) => {
         res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
     }
 };
+const postWishListItems = async (req, res) => {
+    const userID = req.user;
+    const { productID, variationID, isVariation, isRemoval } = req.body;
+    
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized Access, Try again!' });
+        }
 
+        if (isRemoval) {
+            foundUser.wishlist = foundUser.wishlist?.filter(item => 
+                isVariation 
+                    ? item.variationID.toString() !== variationID.toString() 
+                    : item.productId.toString() !== productID.toString()
+            );
+        } else {
+            const existingItem = foundUser.wishlist.find(item =>
+                isVariation 
+                    ? item.variationID.toString() === variationID.toString() 
+                    : item.productId.toString() === productID.toString()
+            );
+
+            if (!existingItem) {
+                foundUser.wishlist.push({
+                    productId: productID,
+                    isVariation: isVariation === '' ? false : isVariation,
+                    variationID: variationID,
+                });
+            }
+        }
+
+        await foundUser.save();
+        res.status(RouteCode.SUCCESS.statusCode).json({ message: 'Wishlist updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
 const postReview = async (req, res) => {
     const userID = req.user;
-    const { orderID, productID, reviewText } = req.body;
+    const { orderID, productID, reviewText, rating } = req.body;
 
     try {
         const foundUser = await User.findById(userID);
@@ -455,11 +496,12 @@ const postReview = async (req, res) => {
 
         foundOrder.products[productIndex].feedback.text = reviewText;
         foundOrder.products[productIndex].feedback.image = feedbackImage;
+        foundOrder.products[productIndex].feedback.rating = rating;
+        foundOrder.products[productIndex].feedback.date = new Date();
         foundOrder.products[productIndex].hasFeedback = true;
 
         // Set order-level feedback to true if necessary
         foundOrder.receivedFeedback = true;
-
         await foundOrder.save();
         res.status(RouteCode.SUCCESS.statusCode).json({ message: 'Product review has been shared successfully' });
     } catch (err) {
@@ -559,4 +601,5 @@ const putOrderConfirmation = async (req, res) => {
 export default {
     getAPIAddress, getOrderList, getOrderDetail, getStatusList, putOrderStatusUpdate,
     getUserOrderList, getPublicOrderDetail, postGoToCheckout, putValidateCoupon, postCheckout, putOrderConfirmation, postReview,
+    postWishListItems,
 }

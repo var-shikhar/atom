@@ -166,6 +166,7 @@ const ProductVariations = ({variationList, handleDeletion, handleVariationForm, 
                         <th colSpan={1}>Variation Type</th>
                         <th colSpan={1}>Variation Price</th>
                         <th colSpan={1}>Variation Quanity</th>
+                        <th colSpan={1}>Is Available</th>
                         <th colSpan={1} className='text-center'>Interact</th>
                     </tr>
                 </thead>
@@ -177,6 +178,7 @@ const ProductVariations = ({variationList, handleDeletion, handleVariationForm, 
                             <td colSpan={1}>{item.value}</td>
                             <td colSpan={1}><small className='text-decoration-line-through me-2'>₹ {item.mrpPrice}/-</small>₹ {item.sellingPrice}/-</td>
                             <td colSpan={1}>{item.stock} {item.stock?.length > 0 ? "PCs" : 'PC'}</td>
+                            <td colSpan={1}>{item.isAvailable ? 'Yes' : 'No'}</td>
                             
                             <td colSpan={1}>
                                 <div className="d-flex gap-2 w-100 justify-content-center align-items-center">

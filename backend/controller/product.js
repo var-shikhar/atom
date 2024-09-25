@@ -1,6 +1,7 @@
 
 import CONSTANT from "../constant/constant.js";
 import { handleImageDeleting, handleImageUploading } from "../helper/cloudinary.js";
+import Order from "../modal/order.js";
 import Product from "../modal/product.js";
 import SubCategory from "../modal/subCategory.js";
 
@@ -245,17 +246,45 @@ const getPublicProductList = async (req, res) => {
 const getPublicProductDetails = async (req, res) => {
     const { productID } = req.params;
     try {
-        const foundProduct = await Product.findById(productID).populate('categoryId').sort({ launchDate: -1 });
-        if(!foundProduct){
-            return res.status(RouteCode.CONFLICT.statusCode).json({message: 'Product not found, Try again!'})
+        const foundProduct = await Product.findById(productID).populate({path: 'categoryId', select: 'name'}).sort({ launchDate: -1 });        
+        if (!foundProduct) {
+            return res.status(RouteCode.CONFLICT.statusCode).json({ message: 'Product not found, try again!' });
         }
 
-        return res.status(RouteCode.SUCCESS.statusCode).json(foundProduct);
+        const ordersWithReviews = await Order.find(
+            { 
+                'products.productId': productID, 
+                'products.feedback.rating': { $gt: 0 } 
+            }, 
+            {
+                userId: 1, 
+                buyerName: 1,
+                orderDate: 1,
+                'products': { $elemMatch: { productId: productID } } 
+            }
+        ).populate('userId') 
+        .exec();
+
+        const reviews = ordersWithReviews.map(order => {
+            const product = order.products[0]; 
+            return {
+                feedback: product.feedback,
+                buyerName: order.buyerName,
+                orderDate: order.orderDate
+            };
+        });
+        
+        const productDetails = foundProduct.toObject();
+        productDetails.reviews = reviews;
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(productDetails);
     } catch (err) {
-        console.error('Error retrieving product list:', err);
+        console.error('Error retrieving product details:', err);
         return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
     }
-}
+};
+
+
 const getLatestProduct = async (req, res) => {
     try {
         const latestProduct = await Product.findOne().populate('categoryId').sort({ launchDate: -1 });
