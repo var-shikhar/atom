@@ -36,16 +36,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // Fallback route
 
-// Serve the main frontend
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
-app.get('/admin/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
-});
-
-// Serve the landing frontend
-app.use(express.static(path.join(__dirname, 'landing_frontend', 'build')));
+// Serve the landing frontend before the admin to avoid conflicts
+app.use('/public', express.static(path.join(__dirname, 'landing_frontend', 'build')));
 app.get('/public/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'landing_frontend', 'build', 'index.html'));
+});
+
+app.use('/admin', express.static(path.join(__dirname, 'frontend', 'build')));
+app.get('/admin/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
 
 import routeHandler from './routes/route.js';
